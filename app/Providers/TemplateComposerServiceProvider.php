@@ -8,8 +8,8 @@ class TemplateComposerServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton('amazon-product-listing-composer', function () {
-            return resolve('App\TemplateComposers\AmazonProductListingComposer');
-        });
+//        $this->app->singleton('amazon-product-listing-composer', function () {
+//            return resolve('App\TemplateComposers\AmazonProductListingComposer');
+//        });
     }
 }

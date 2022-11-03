@@ -6,23 +6,38 @@
       </h2>
     </template>
 
-    <div class='py-12 flex-1'>
+    <div class='py-12 space-y-16 flex-1 overflow-y-hidden'>
       <div class='max-w-7xl mx-auto sm:px-6 lg:px-8'>
         <form @submit.prevent='submit'>
           <div class='bg-white overflow-hidden shadow-xl sm:rounded-lg'>
             <div class='shadow sm:overflow-hidden sm:rounded-md'>
               <div class='space-y-6 bg-white py-6 px-4 sm:p-6'>
-                <TemplateSelector v-model='form.templateId' title='Select a Listing Type' />
-                <Component :is='template' v-if='form.templateId' @update:model-value='updateModelValueHandler' />
+                <TemplateSelector v-model='form.template' title='Select a Composition Type' />
+                <Component :is='templateComposer' v-if='form.template' @update:model-value='updateModelValueHandler' />
               </div>
               <div class='bg-gray-50 px-4 py-3 text-right sm:px-6'>
-                <PrimaryButton :disabled='!formValid'>
+                <PrimaryButton :disabled='!canSubmit'>
                   Compose
                 </PrimaryButton>
               </div>
             </div>
           </div>
         </form>
+      </div>
+
+      <div v-if='choices.length' class='max-w-7xl mx-auto sm:px-6 lg:px-8'>
+        <h3 class='mb-4 text-2xl'>Results</h3>
+        <div class='space-y-4 overflow-y-auto'>
+          <div
+            v-for='choice in choices' :key='choice.id'
+            class='bg-white overflow-hidden shadow sm:rounded-md'>
+            <div class='shadow sm:overflow-hidden sm:rounded-md'>
+              <div class='space-y-6 bg-white py-6 px-4 sm:p-6'>
+                <p>{{ choice.text }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </AppLayout>
@@ -33,29 +48,47 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import TemplateSelector from '@/Pages/Compose/TemplateSelector.vue'
 import { computed, defineAsyncComponent, reactive } from 'vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
+import { usePage } from '@inertiajs/inertia-vue3'
 
 type Payload = Record<string, unknown>
 
 interface Form {
-  templateId?: string
+  template?: string
   payload: Payload
   processing: boolean
 }
 
+interface Choice {
+  id: string
+  composition_result_id: string
+  text: string
+}
+
+const AmazonProductListingTemplate = defineAsyncComponent(() => import('@/Pages/Compose/Templates/AmazonProductListing.vue'))
+
+const { props: pageProps } = $(usePage<{ model?: string }>())
+
 let formValid = $ref(false)
+let parentCompositionId = $ref(null)
+
+const choices = $ref<Choice[]>([])
+
 const form = reactive<Form>({
-  templateId: undefined,
+  template: undefined,
   payload: {},
   processing: false,
 })
 
-const AmazonProductListingTemplate = defineAsyncComponent(() => import('@/Pages/Compose/Templates/AmazonProductListing.vue'))
-
-const template = computed(() => {
-  if (form.templateId === 'amazon-product-listing') {
-    return AmazonProductListingTemplate
+const templateComposer = computed(() => {
+  switch (form.template) {
+    case 'amazon-product-listing':
+      return AmazonProductListingTemplate
   }
-  throw new Error('Invalid template ID ' + form.templateId)
+  throw new Error('Invalid template ID ' + form.template)
+})
+
+const canSubmit = $computed(() => {
+  return !form.processing && formValid
 })
 
 function updateModelValueHandler({ payload, isValid }: { payload: Payload, isValid: boolean }) {
@@ -66,11 +99,14 @@ function updateModelValueHandler({ payload, isValid }: { payload: Payload, isVal
 async function submit() {
   form.processing = true
   try {
-    const response = await axios.post(route('compose.store'), {
-      template: form.templateId,
+    const { data } = await axios.post(route('compose.store'), {
+      template: form.template,
       payload: form.payload,
+      parent_composition_id: parentCompositionId,
+      model: pageProps.model,
     })
-    console.log(response)
+    parentCompositionId = data.parent_composition_id
+    choices.push(...data.choices)
   } catch (error) {
     console.log(error)
     // todo: show an error

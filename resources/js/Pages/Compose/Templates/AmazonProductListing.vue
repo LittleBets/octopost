@@ -37,6 +37,7 @@ interface Payload {
   features: string
   variations: number
   audience: string
+  model?: string
 }
 
 interface Props {

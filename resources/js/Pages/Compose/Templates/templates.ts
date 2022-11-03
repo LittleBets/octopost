@@ -34,6 +34,9 @@ const audiences = [
   { id: 'teenagers', title: 'Teenagers' },
   { id: 'adults', title: 'Adults' },
   { id: 'seniors', title: 'Seniors' },
+  { id: 'adventurers', title: 'Adventurers' },
+  { id: 'beauty_fans', title: 'Beauty Fans' },
+  { id: 'trendsetters', title: 'trendsetters' },
 ]
 
 export {
