@@ -33,8 +33,9 @@ module.exports = {
         selfClosingTag: 'always',
       },
     ],
+    'vue/no-setup-props-destructure': 'off',
   },
   globals: {
-    route: true,
+    route: true
   },
 }

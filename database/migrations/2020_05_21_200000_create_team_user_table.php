@@ -3,20 +3,18 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Query\Expression;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+return new class extends Migration {
     public function up()
     {
         Schema::create('team_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('team_id');
-            $table->foreignId('user_id');
+            $table
+                ->uuid('id')
+                ->primary()
+                ->default(new Expression('uuid_generate_v4()'));
+            $table->foreignUuid('team_id');
+            $table->foreignUuid('user_id');
             $table->string('role')->nullable();
             $table->timestamps();
 
@@ -24,11 +22,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('team_user');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ComposeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,4 +33,9 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    Route::name('compose.')->prefix('/compose')->group(function () {
+        Route::get('/', [ComposeController::class, 'show'])->name('show');
+        Route::post('/', [ComposeController::class, 'store'])->name('store');
+    });
 });
