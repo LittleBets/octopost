@@ -4,7 +4,7 @@
     <div
       class="group relative rounded border border-gray-300 px-4 py-1.5 focus-within:z-10 focus-within:border-gray-600 focus-within:ring-1 focus-within:ring-gray-600"
     >
-      <div class="text-gray-400 group-focus-within:text-gray-700">
+      <div class="text-gray-500 group-focus-within:text-gray-700">
         <slot name="label">
           <RequiredFieldLabel v-if="label" :label="label" :required="required" />
         </slot>

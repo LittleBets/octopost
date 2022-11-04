@@ -16,7 +16,7 @@ abstract class BaseComposer implements ComposerContract
     {
     }
 
-    abstract protected function prompt(array $payload): CompositionPrompt;
+    abstract public function prompt(array $payload): CompositionPrompt;
 
     public function compose(array $payload, ?string $parentId = null): CompositionResult
     {

@@ -1,23 +1,20 @@
 <template>
   <ListItemSelector
-    v-model='selected'
-    :options='audiences'
-    :title='title'
+    v-model="selected"
+    v-model:checked="checkState"
+    :options="audiences"
+    :title="title"
+    with-checkbox
   />
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { computed } from 'vue'
 import { audiences } from '@/Pages/Compose/Templates/templates'
 import ListItemSelector from '@/Pages/Compose/ListItemSelector.vue'
 
-interface Props {
-  title?: string
-  modelValue?: string
-}
-
-const { title = 'Select Target Audience', modelValue = null } = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
+const { title = 'Target Audience', modelValue = null, checked = true } = defineProps<Props>()
+const emit = defineEmits(['update:modelValue', 'update:checked'])
 
 const selected = computed({
   get() {
@@ -28,4 +25,16 @@ const selected = computed({
   },
 })
 
+const checkState = $computed({
+  get: () => checked,
+  set: (val) => {
+    emit('update:checked', val)
+  },
+})
+
+interface Props {
+  title?: string
+  modelValue?: string
+  checked?: boolean
+}
 </script>

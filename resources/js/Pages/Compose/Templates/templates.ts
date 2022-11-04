@@ -1,6 +1,4 @@
-const templates = [
-  { id: 'amazon-product-listing', title: 'Amazon Product Listing' },
-]
+const templates = [{ id: 'amazon-product-listing', title: 'Amazon Product Listing' }]
 
 const tones = [
   { id: 'friendly', title: 'Friendly' },
@@ -39,8 +37,10 @@ const audiences = [
   { id: 'trendsetters', title: 'trendsetters' },
 ]
 
-export {
-  templates,
-  tones,
-  audiences,
-}
+const compositionLengths = [
+  { key: 'short', name: 'Short', description: 'About 1-2 sentences. Cost: ~100 tokens' },
+  { key: 'medium', name: 'Medium', description: 'About 2-4 sentences. Cost: ~160 tokens' },
+  { key: 'long', name: 'Long', description: 'About 3-5 sentences. Cost: ~240 tokens' },
+]
+
+export { templates, tones, audiences, compositionLengths }

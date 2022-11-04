@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Octopost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -142,6 +142,8 @@ return [
         'driver' => 'file',
         // 'store'  => 'redis',
     ],
+
+    'token_counter_endpoint' => env('OCTOPOST_TOKEN_COUNTER_ENDPOINT'),
 
     /*
     |--------------------------------------------------------------------------

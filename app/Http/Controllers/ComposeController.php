@@ -27,7 +27,7 @@ class ComposeController extends Controller
         if ($modelType === 'fake') {
             $composer->fake();
         }
-        $compositionResult = $composer->compose($request->input('payload', []), $request->input('composition_parent_id'));
+        $compositionResult = $composer->compose($request->input('payload'), $request->input('composition_parent_id'));
         return response()->json([
             'parent_composition_id' => $compositionResult->composition_id,
             'choices' => CompositionResultChoiceResource::collection($compositionResult->choices),
