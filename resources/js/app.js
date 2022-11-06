@@ -9,7 +9,7 @@ import { ZiggyVue } from 'ziggy-js/dist/vue.m'
 import { Icon } from '@iconify/vue'
 import VueTippy from 'vue-tippy'
 import 'tippy.js/themes/light-border.css'
-// import 'tippy.js/dist/tippy.css' // default dark theme
+import 'tippy.js/dist/tippy.css' // default dark theme
 import 'tippy.js/animations/shift-toward-subtle.css'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Octopost'

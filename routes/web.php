@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ComposeController;
+use App\Http\Controllers\CompositionController;
 use App\Http\Controllers\UsageController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -23,9 +23,10 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::name('compose.')->prefix('/compose')->group(function () {
-        Route::get('/', [ComposeController::class, 'show'])->name('show');
-        Route::post('/', [ComposeController::class, 'store'])->name('store');
+    Route::name('composition.')->prefix('/composition')->group(function () {
+        Route::get('/', [CompositionController::class, 'show'])->name('show');
+        Route::post('/', [CompositionController::class, 'store'])->name('store');
+        Route::patch('/{composition_id}', [CompositionController::class, 'update'])->name('update');
     });
     Route::name('usage.')->prefix('/usage')->group(function () {
         Route::get('/guess', [UsageController::class, 'guess'])->name('guess');

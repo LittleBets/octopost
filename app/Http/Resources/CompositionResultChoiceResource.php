@@ -10,10 +10,9 @@ class CompositionResultChoiceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'composition_result_id' => $this->composition_result_id,
             'text' => $this->text,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => userTimeZone($this->created_at),
+            'created_at_short' => shortDateAndTime($this->created_at),
         ];
     }
 }

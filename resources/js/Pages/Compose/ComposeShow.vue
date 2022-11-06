@@ -1,6 +1,6 @@
 <template>
   <AppLayout title="Compose">
-    <div class="py-12 space-y-16 flex-1 overflow-y-hidden flex flex-col">
+    <div class="flex flex-1 flex-col space-y-16 overflow-y-hidden py-8">
       <Component :is="templateComposer" v-if="template">
         <template #header>
           <TemplateSelector v-model="template" title="Composition Type" />

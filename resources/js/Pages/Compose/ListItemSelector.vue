@@ -36,7 +36,7 @@
         leave-to-class="opacity-0"
       >
         <ListboxOptions
-          class="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded bg-gray-50 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+          class="absolute mt-1 max-h-56 w-full overflow-auto rounded bg-gray-50 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
         >
           <ListboxOption
             v-for="option in options"
@@ -103,9 +103,11 @@ watchEffect(() => {
   emit('update:modelValue', option?.id)
 })
 
-const checkState = $ref(checked)
-watchEffect(() => {
-  emit('update:checked', checkState)
+const checkState = $computed({
+  get: () => checked,
+  set: (val) => {
+    emit('update:checked', val)
+  },
 })
 
 const isDisabled = $computed(() => disabled || (withCheckbox && checkState === false))

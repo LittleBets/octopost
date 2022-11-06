@@ -20,7 +20,7 @@
         >
           <div
             :class="[
-              checked ? 'z-10 bg-gray-100' : '',
+              checked ? 'bg-gray-100' : '',
               settingIdx === options.length - 1 ? 'rounded-bl rounded-br' : '',
               'relative -mx-4 flex cursor-pointer p-4 focus:outline-none',
             ]"

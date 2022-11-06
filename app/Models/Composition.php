@@ -16,13 +16,17 @@ class Composition extends BaseModel
         return $this->belongsTo(User::class);
     }
 
-    public function parentComposition()
+    public function rootComposition()
     {
-        return $this->belongsTo(Composition::class, 'parent_composition_id');
+        return $this->belongsTo(Composition::class, 'root_composition_id');
     }
 
-    public function results()
+    public function result()
     {
-        return $this->hasMany(CompositionResult::class);
+        return $this->hasOne(CompositionResult::class);
+    }
+
+    public function childrenCompositions() {
+        return $this->hasMany(Composition::class, 'root_composition_id');
     }
 }

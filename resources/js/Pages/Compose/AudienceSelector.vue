@@ -9,14 +9,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
 import { audiences } from '@/Pages/Compose/Templates/templates'
 import ListItemSelector from '@/Pages/Compose/ListItemSelector.vue'
 
-const { title = 'Target Audience', modelValue = null, checked = true } = defineProps<Props>()
+const { title = 'Target Audience', modelValue = null, checked = false } = defineProps<Props>()
 const emit = defineEmits(['update:modelValue', 'update:checked'])
 
-const selected = computed({
+const selected = $computed({
   get() {
     return modelValue
   },

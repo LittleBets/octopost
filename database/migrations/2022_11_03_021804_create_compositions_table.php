@@ -14,9 +14,10 @@ return new class extends Migration {
                 ->primary()
                 ->default(new Expression('uuid_generate_v4()'));
             $table->string('template')->index();
+            $table->string('label')->nullable();
             $table->json('payload');
-            $table->foreignUuid('composer_id')->index();
-            $table->foreignUuid('parent_composition_id')->nullable()->index();
+            $table->foreignUuid('user_id')->index();
+            $table->foreignUuid('root_composition_id')->nullable()->index();
             $table->timestamps();
         });
     }
