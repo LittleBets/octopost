@@ -12,7 +12,12 @@
           <form class="flex h-full flex-col overflow-y-auto" @submit.prevent="submit">
             <div class="flex-1 space-y-6 overflow-y-auto bg-white py-6 px-4 sm:p-6">
               <slot name="header" />
-              <TextInput v-model="payloadForm.name" label="Product Name" required />
+              <TextInput
+                ref="productNameRef"
+                v-model="payloadForm.name"
+                label="Product Name"
+                required
+              />
               <Textarea
                 v-model="payloadForm.features"
                 label="Product Features"
@@ -107,10 +112,17 @@ import { tones } from '@/Pages/Compose/Templates/templates'
 import { useForm, usePage } from '@inertiajs/inertia-vue3'
 import { $computed } from 'vue/macros'
 import CompositionLabelUpdateModal from '@/Pages/Compose/CompositionLabelUpdateModal.vue'
+import { nextTick, onMounted } from 'vue'
 
 const { props: pageProps } = $(usePage<{ model?: string }>())
 
 const { initial } = defineProps<Props>()
+
+const productNameRef = $ref<HTMLElement>()
+
+onMounted(() => {
+  setFocus()
+})
 
 const template = 'amazon-product-listing'
 
@@ -170,6 +182,8 @@ async function submit() {
 function startNewHandler() {
   resetPayloadForm()
   resetResult()
+  compositionLabel = undefined
+  setFocus()
 }
 
 function resetPayloadForm() {
@@ -183,8 +197,14 @@ function resetResult() {
   compositionVersion = undefined
 }
 
-let compositionLabel = $ref()
+let compositionLabel = $ref<string | undefined>()
 const showingLabelDialog = $ref(false)
+
+function setFocus() {
+  nextTick(() => {
+    productNameRef?.focus()
+  })
+}
 
 interface Props {
   initial?: { payload: Fields; isValid: boolean }
