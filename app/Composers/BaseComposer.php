@@ -49,6 +49,7 @@ abstract class BaseComposer implements ComposerContract
                 ...$payload,
             ],
             'user_id' => auth()->id(),
+            'team_id' => auth()->user()->current_team_id,
             'root_composition_id' => $rootCompositionId,
         ]);
     }

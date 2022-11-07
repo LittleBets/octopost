@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->foreignUuid('composition_result_id')->index();
             $table->longText('text');
             $table->json('extras');
+            $table->foreignUuid('last_edited_by')->nullable();
+            $table->dateTime('last_edited_at')->nullable();
             $table->timestamps();
         });
     }

@@ -1,19 +1,19 @@
 <template>
-  <div class="rounded-full bg-gray-200 px-3 py-1 text-sm font-semibold space-x-1">
+  <div class="space-x-1 rounded-full bg-gray-200 px-3 py-1 text-sm font-semibold">
     <InfoTooltip>
-      <div class="inline-flex items-center gap-1 mr-2">
+      <div class="mr-2 inline-flex items-center gap-1">
         <icon icon="wpf:coins" class="h-4 w-4 text-gray-500" />
         <span class="text-gray-700">{{ usage.total_tokens }}</span>
       </div>
       <template #content>
         <div>
           <h3 class="text-lg font-medium leading-6 text-gray-900">Usage Cost</h3>
-          <div class="leading-relaxed pt-2">
-            This is an approximation of the total cost of your composition in terms of tokens. The
+          <div class="pt-2 font-normal leading-relaxed">
+            This is an approximation of the total cost of your composition in terms of credits. The
             actual cost may vary depending on the number of characters in your final output.
           </div>
           <dl
-            class="mt-2 grid grid-cols-1 overflow-hidden rounded bg-white md:grid-cols-3 divide-x"
+            class="mt-4 grid grid-cols-1 divide-x overflow-hidden rounded bg-white md:grid-cols-3"
           >
             <div class="px-4">
               <dt class="font-normal text-gray-900">Input</dt>

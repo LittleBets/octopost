@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('label')->nullable();
             $table->json('payload');
             $table->foreignUuid('user_id')->index();
+            $table->foreignUuid('team_id');
             $table->foreignUuid('root_composition_id')->nullable()->index();
             $table->timestamps();
         });
