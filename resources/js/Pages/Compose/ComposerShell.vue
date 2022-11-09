@@ -12,16 +12,7 @@
       </div>
       <div class="flex h-full w-full flex-col overflow-y-hidden px-6">
         <slot name="result" />
-        <div v-if="showEmptyResultPlaceholder" class="mx-auto my-auto w-full max-w-2xl px-6">
-          <div
-            class="relative block rounded-lg border-2 border-dotted border-gray-300 p-12 text-center"
-          >
-            <icon class="mx-auto h-10 w-10 text-gray-400" icon="ph:pencil-simple-line" />
-            <span class="mt-2 block text-lg font-medium text-gray-900"
-              >Your composition results will appear here once available.</span
-            >
-          </div>
-        </div>
+        <slot name="emptyResult" />
       </div>
     </div>
   </div>
@@ -33,13 +24,12 @@ import { usePage } from '@inertiajs/inertia-vue3'
 import CompositionLabel from '@/Pages/Compose/CompositionLabel.vue'
 const { props: pageProps } = $(usePage<{ model?: string }>())
 
-const { rootCompositionId, compositionLabel, showEmptyResultPlaceholder } = defineProps<Props>()
+const { rootCompositionId, compositionLabel } = defineProps<Props>()
 
 const model = $computed(() => pageProps.model)
 
 interface Props {
   rootCompositionId?: string
   compositionLabel?: string
-  showEmptyResultPlaceholder: boolean
 }
 </script>

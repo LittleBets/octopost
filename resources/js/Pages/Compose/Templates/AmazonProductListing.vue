@@ -1,9 +1,5 @@
 <template>
-  <ComposerShell
-    :root-composition-id="rootCompositionId"
-    :composition-label="compositionLabel"
-    :show-empty-result-placeholder="compositionResult == null"
-  >
+  <ComposerShell :root-composition-id="rootCompositionId" :composition-label="compositionLabel">
     <form class="flex h-full flex-col overflow-y-auto" @submit.prevent="submit">
       <div class="flex-1 space-y-6 overflow-y-auto bg-white py-6 px-4 sm:p-6">
         <slot name="header" />
@@ -43,23 +39,22 @@
         </div>
       </div>
     </form>
-    <template #result>
-      <AmazonProductListingResult
-        v-if="compositionResult"
-        :result="compositionResult"
-        :version="compositionVersion"
-      >
+    <template v-if="compositionResult" #result>
+      <AmazonProductListingResult :result="compositionResult" :version="compositionVersion">
         <template #footer>
           <ResultFooter :composition-version="compositionVersion" />
         </template>
       </AmazonProductListingResult>
+    </template>
+    <template v-else #emptyResult>
+      <EmptyResult />
     </template>
   </ComposerShell>
 </template>
 
 <script lang="ts" setup>
 import { $computed } from 'vue/macros'
-import { nextTick, onMounted } from 'vue'
+import { nextTick } from 'vue'
 import TextInput from '@/Components/TextInput.vue'
 import CompositionCostCounter from '@/Components/CompositionCostCounter.vue'
 import ToneSelector from '@/Pages/Compose/ToneSelector.vue'
@@ -71,10 +66,11 @@ import AmazonProductListingResult from '@/Pages/Compose/Templates/AmazonProductL
 import LinkButton from '@/Components/LinkButton.vue'
 import ResultFooter from '@/Pages/Compose/ResultFooter.vue'
 import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
+import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
 import { tones } from '@/Pages/Compose/Templates/templates'
 import { useForm, usePage } from '@inertiajs/inertia-vue3'
 
-const { props: pageProps } = $(usePage<{ model?: string }>())
+const { props: pageProps } = usePage<{ model?: string }>()
 
 const { initial } = defineProps<Props>()
 
@@ -83,7 +79,7 @@ const template = 'amazon-product-listing'
 let compositionResult = $ref<CompositionResult | undefined>(undefined)
 let rootCompositionId = $ref<string | undefined>(undefined)
 let compositionVersion = $ref<number | undefined>(undefined)
-const model = $computed(() => pageProps.model)
+const model = $computed(() => pageProps.value.model)
 
 const payloadForm = useForm<Fields>({
   name: initial?.payload?.name ?? '',

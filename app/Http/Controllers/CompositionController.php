@@ -48,7 +48,6 @@ class CompositionController extends Controller
     public function update(Request $request)
     {
         $newAttributes = $request->all(['label']);
-        clock($newAttributes);
         Composition::where('id', $request->composition_id)->update($newAttributes);
         return response()->json($newAttributes);
     }
