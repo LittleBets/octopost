@@ -22,7 +22,11 @@ const FreeformTemplate = defineAsyncComponent(
   () => import('@/Pages/Compose/Templates/ComposeFreeform.vue')
 )
 
-const template = $ref('amazon-product-listing')
+const ResponseTemplate = defineAsyncComponent(
+  () => import('@/Pages/Compose/Templates/ComposeResponse.vue')
+)
+
+const template = $ref<TemplateTypeIds>('amazon-product-listing')
 
 const templateComposer = computed(() => {
   switch (template) {
@@ -30,6 +34,8 @@ const templateComposer = computed(() => {
       return AmazonProductListingTemplate
     case 'freeform':
       return FreeformTemplate
+    case 'response':
+      return ResponseTemplate
   }
   throw new Error(`Invalid template ID ${template}`)
 })

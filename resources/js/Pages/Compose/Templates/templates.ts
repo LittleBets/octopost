@@ -1,8 +1,8 @@
-interface TemplateType {
-  id: string
-  title: string
-}
 const templates: TemplateType[] = [
+  {
+    id: 'response',
+    title: 'Response',
+  },
   {
     id: 'amazon-product-listing',
     title: 'Amazon Product Listing',
@@ -39,11 +39,12 @@ const audiences = [
   { id: 'parents', title: 'Parents' },
   { id: 'women', title: 'Women' },
   { id: 'men', title: 'Men' },
-  { id: 'babies', title: 'Babies' },
-  { id: 'toddlers', title: 'Toddlers' },
   { id: 'kids', title: 'Kids' },
   { id: 'teenagers', title: 'Teenagers' },
   { id: 'adults', title: 'Adults' },
+  { id: 'clients', title: 'Clients' },
+  { id: 'friends', title: 'Friends' },
+  { id: 'boss', title: 'Boss' },
   { id: 'seniors', title: 'Seniors' },
   { id: 'adventurers', title: 'Adventurers' },
   { id: 'beauty_fans', title: 'Beauty Fans' },
@@ -56,4 +57,11 @@ const compositionLengths = [
   { key: 'long', name: 'Long', description: 'About 3-5 sentences. Cost: ~240 credits' },
 ]
 
-export { templates, tones, audiences, compositionLengths }
+const responseTypes = [
+  { id: 'email', title: 'Email' },
+  { id: 'tweet', title: 'Tweet' },
+  { id: 'fb', title: 'Facebook Post' },
+  { id: 'message', title: 'Message' },
+]
+
+export { templates, tones, audiences, compositionLengths, responseTypes }

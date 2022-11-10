@@ -34,4 +34,10 @@ declare global {
     created_at_short: string
     text: string
   }
+
+  type TemplateTypeIds = 'response' | 'amazon-product-listing' | 'freeform'
+  interface TemplateType {
+    id: TemplateTypeIds
+    title: string
+  }
 }
