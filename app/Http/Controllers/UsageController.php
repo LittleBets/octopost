@@ -16,6 +16,13 @@ class UsageController extends Controller
         $composer = ComposerFactory::make($request->input('template'));
         $compositionPrompt = $composer->prompt($request->input('payload'));
         $prompt = $compositionPrompt->prompt;
+        if(strlen($prompt) === 0) {
+            return response()->json([
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'total_tokens' => 0,
+            ]);
+        }
         $counterResponse = Http::post(config('app.token_counter_endpoint'), ['prompt' => $prompt,]);
         if ($counterResponse->ok()) {
             $promptToken = $counterResponse['length'];

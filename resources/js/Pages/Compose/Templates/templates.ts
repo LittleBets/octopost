@@ -1,4 +1,17 @@
-const templates = [{ id: 'amazon-product-listing', title: 'Amazon Product Listing' }]
+interface TemplateType {
+  id: string
+  title: string
+}
+const templates: TemplateType[] = [
+  {
+    id: 'amazon-product-listing',
+    title: 'Amazon Product Listing',
+  },
+  {
+    id: 'freeform',
+    title: 'Freeform',
+  },
+]
 
 const tones = [
   { id: 'friendly', title: 'Friendly' },

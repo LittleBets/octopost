@@ -18,6 +18,10 @@ abstract class BaseComposer implements ComposerContract
 
     abstract public function prompt(array $payload): CompositionPrompt;
 
+    protected function compositionLabel(array $payload): string {
+        return $payload['label'] ?? $payload['name'] ?? 'Untitled';
+    }
+
     public function compose(array $payload, ?string $rootCompositionId = null): array
     {
         $prompt = $this->prompt($payload);
@@ -43,7 +47,7 @@ abstract class BaseComposer implements ComposerContract
     {
         return Composition::create([
             'template' => $this->template,
-            'label' => $payload['label'] ?? $payload['name'],
+            'label' => $this->compositionLabel($payload),
             'payload' => [
                 ...$prompt->toArray(),
                 ...$payload,
@@ -70,7 +74,7 @@ abstract class BaseComposer implements ComposerContract
             unset($extras['text']);
             return [
                 'composition_result_id' => $result->id,
-                'text' => $text,
+                'text' => trim($text),
                 'extras' => $extras,
             ];
         });

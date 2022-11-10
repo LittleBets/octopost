@@ -16,7 +16,10 @@ import TemplateSelector from '@/Pages/Compose/TemplateSelector.vue'
 import { computed, defineAsyncComponent } from 'vue'
 
 const AmazonProductListingTemplate = defineAsyncComponent(
-  () => import('@/Pages/Compose/Templates/AmazonProductListing.vue')
+  () => import('@/Pages/Compose/Templates/ComposeAmazonProductListing.vue')
+)
+const FreeformTemplate = defineAsyncComponent(
+  () => import('@/Pages/Compose/Templates/ComposeFreeform.vue')
 )
 
 const template = $ref('amazon-product-listing')
@@ -25,6 +28,8 @@ const templateComposer = computed(() => {
   switch (template) {
     case 'amazon-product-listing':
       return AmazonProductListingTemplate
+    case 'freeform':
+      return FreeformTemplate
   }
   throw new Error(`Invalid template ID ${template}`)
 })

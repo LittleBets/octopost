@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue'
+import { PropType, watch } from 'vue'
 import CompositionResultChoice from '@/Pages/Compose/CompositionResultChoice.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
 
@@ -20,6 +20,13 @@ const props = defineProps({
 })
 
 let choices = $ref(props.result.choices)
+
+watch(
+  () => props.result,
+  (result) => {
+    choices = result.choices
+  }
+)
 
 function choiceDeletedHandler(id: string) {
   choices = choices.filter((choice) => choice.id !== id)

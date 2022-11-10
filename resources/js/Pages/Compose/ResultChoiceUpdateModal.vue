@@ -4,7 +4,7 @@
       <p>Update Result</p>
     </template>
     <template #content>
-      <Textarea ref="resultTextareaRef" v-model="text" />
+      <Textarea ref="resultTextareaRef" v-model="text" :rows="20" />
     </template>
     <template #footer>
       <SecondaryButton @click="closeDialog"> Cancel</SecondaryButton>
