@@ -11,9 +11,11 @@
 
     <!-- Scripts -->
     @routes
-    <script>
-        Ziggy.url = '{{ config('APP_URL') }}'
-    </script>
+{{--    @if(config('app.env') === 'local')--}}
+{{--        <script>--}}
+{{--            Ziggy.url = '{{ config('APP_URL') }}'--}}
+{{--        </script>--}}
+{{--    @endif--}}
     @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
     @inertiaHead
 </head>

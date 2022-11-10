@@ -20,11 +20,14 @@
                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                   Dashboard
                 </NavLink>
+                <NavLink :href="route('compose.new')" :active="route().current('compose.new')">
+                  Compose
+                </NavLink>
                 <NavLink
                   :href="route('composition.show')"
                   :active="route().current('composition.show')"
                 >
-                  Compose
+                  Compositions
                 </NavLink>
               </div>
             </div>
@@ -210,6 +213,18 @@
           <div class="space-y-1 pt-2 pb-3">
             <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
               Dashboard
+            </ResponsiveNavLink>
+            <ResponsiveNavLink
+              :href="route('compose.new')"
+              :active="route().current('compose.new')"
+            >
+              Compose
+            </ResponsiveNavLink>
+            <ResponsiveNavLink
+              :href="route('composition.show')"
+              :active="route().current('composition.show')"
+            >
+              Compositions
             </ResponsiveNavLink>
           </div>
 

@@ -20,6 +20,12 @@ class CompositionController extends Controller
             'model' => $request->input('model'),
         ]);
     }
+    public function compose(Request $request): Response
+    {
+        return Inertia::render('Compose/ComposeShow', [
+            'model' => $request->input('model'),
+        ]);
+    }
 
     public function store(Request $request): JsonResponse
     {

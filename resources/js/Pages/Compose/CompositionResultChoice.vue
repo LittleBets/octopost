@@ -17,7 +17,7 @@
         </div>
         <div class="flex items-center justify-end gap-4">
           <LinkButton v-tippy="'Edit &nbsp;&nbsp;&nbsp;E'" @click="edit">
-            <icon icon="ph:pencil" class="h-5 w-auto" />
+            <icon icon="ph:pencil-simple" class="h-5 w-auto" />
           </LinkButton>
           <LinkButton
             v-if="isClipboardSupported"
@@ -57,10 +57,12 @@
 import { nextTick, PropType, ref } from 'vue'
 import LinkButton from '@/Components/LinkButton.vue'
 import ResultChoiceUpdateModal from '@/Pages/Compose/ResultChoiceUpdateModal.vue'
-import { useClipboard, useMagicKeys, useMouseInElement, whenever } from '@vueuse/core'
+import { useClipboard, useMagicKeys, whenever } from '@vueuse/core'
+import { and } from '@vueuse/math'
 import ConfirmationModal from '@/Components/ConfirmationModal.vue'
 import DangerButton from '@/Components/DangerButton.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
+import { useIsMouseInside } from '@/compositions/useIsMouseInside'
 
 const { copy, isSupported: isClipboardSupported } = useClipboard()
 
@@ -109,26 +111,20 @@ async function deleteResult() {
   }
 }
 
-const containerRef = ref<HTMLElement>()
-const { isOutside } = useMouseInElement(containerRef)
+const containerRef = ref<HTMLElement | null>(null)
+const { isInside } = useIsMouseInside(containerRef)
 
 const { c, d, e } = useMagicKeys()
 
-whenever(c, () => {
-  if (!isOutside.value) {
-    copyToClipboard()
-  }
+whenever(and(c, isInside), () => {
+  copyToClipboard()
 })
 
-whenever(d, () => {
-  if (!isOutside.value) {
-    confirmingDeletion = true
-  }
+whenever(and(d, isInside), () => {
+  confirmingDeletion = true
 })
 
-whenever(e, () => {
-  if (!isOutside.value) {
-    edit()
-  }
+whenever(and(e, isInside), () => {
+  edit()
 })
 </script>

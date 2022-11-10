@@ -10,7 +10,6 @@
           name="product_features"
           :rows="8"
           required
-          class="flex-1"
         />
         <ToneSelector v-model="payloadForm.tone" />
         <AudienceSelector

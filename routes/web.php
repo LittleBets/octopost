@@ -29,6 +29,9 @@ Route::middleware([
         Route::post('/', [CompositionController::class, 'store'])->name('store');
         Route::patch('/{composition_id}', [CompositionController::class, 'update'])->name('update');
     });
+    Route::name('compose.')->prefix('/compose')->group(function () {
+        Route::get('/', [CompositionController::class, 'compose'])->name('new');
+    });
     Route::name('composition-result-choice.')->prefix('/composition-result-choice')->group(function () {
         Route::patch('/{composition_result_choice_id}', [CompositionResultChoiceController::class, 'update'])->name('update');
         Route::delete('/{composition_result_choice_id}', [CompositionResultChoiceController::class, 'destroy'])->name('destroy');

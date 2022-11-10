@@ -3,6 +3,16 @@ import laravel from 'laravel-vite-plugin'
 import vue from '@vitejs/plugin-vue'
 import fs from 'fs'
 
+const server = {
+  port: 5173,
+}
+// if (DEV) {
+//   server.https = {
+//     key: fs.readFileSync('./local_certs/key.pem'),
+//     cert: fs.readFileSync('./local_certs/cert.pem'),
+//   }
+// }
+
 export default defineConfig({
   plugins: [
     laravel({
@@ -19,11 +29,5 @@ export default defineConfig({
       },
     }),
   ],
-  server: {
-    port: 5173,
-    https: {
-      key: fs.readFileSync('./local_certs/key.pem'),
-      cert: fs.readFileSync('./local_certs/cert.pem'),
-    },
-  },
+  server,
 })
