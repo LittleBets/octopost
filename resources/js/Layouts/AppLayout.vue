@@ -24,8 +24,8 @@
                   Compose
                 </NavLink>
                 <NavLink
-                  :href="route('composition.show')"
-                  :active="route().current('composition.show')"
+                  :href="route('composition.showAll')"
+                  :active="route().current('composition.showAll')"
                 >
                   Compositions
                 </NavLink>
@@ -221,8 +221,8 @@
               Compose
             </ResponsiveNavLink>
             <ResponsiveNavLink
-              :href="route('composition.show')"
-              :active="route().current('composition.show')"
+              :href="route('composition.showAll')"
+              :active="route().current('composition.showAll')"
             >
               Compositions
             </ResponsiveNavLink>
@@ -332,7 +332,7 @@
       </header>
 
       <!-- Page Content -->
-      <main class="flex flex-1 flex-col overflow-y-auto">
+      <main class="flex flex-1 flex-col overflow-y-hidden">
         <slot />
       </main>
     </div>

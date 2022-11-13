@@ -3,7 +3,13 @@
     <p>
       All your composition iterations are saved as versions. This is version
       {{ compositionVersion }}.
-      <LinkButton label="Check out" underline />
+      <LinkButton
+        as="anchor"
+        :href="route('composition.showOne', compositionId)"
+        label="Check out"
+        underline
+        :target="compositionId"
+      />
       all the versions.
     </p>
   </div>
@@ -12,6 +18,7 @@
 <script setup lang="ts">
 import LinkButton from '@/Components/LinkButton.vue'
 defineProps({
+  compositionId: { type: String, required: true },
   compositionVersion: { type: Number, required: true },
 })
 </script>

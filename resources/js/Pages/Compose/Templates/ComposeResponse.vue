@@ -7,7 +7,7 @@
         <Textarea
           ref="messageRef"
           v-model="payloadForm.message"
-          :label="replyToInputTitle"
+          label="Message to Reply"
           name="message"
           :rows="12"
           required
@@ -17,6 +17,7 @@
         <AudienceSelector
           v-model="payloadForm.audience"
           v-model:checked="audienceSelectorChecked"
+          title="Address this response to"
         />
         <LengthSelector v-model="payloadForm.composition_length" />
         <TextInput
@@ -44,7 +45,10 @@
     <template v-if="compositionResult" #result>
       <AmazonProductListingResult :result="compositionResult" :version="compositionVersion">
         <template #footer>
-          <ResultFooter :composition-version="compositionVersion" />
+          <ResultFooter
+            :composition-version="compositionVersion"
+            :composition-id="rootCompositionId"
+          />
         </template>
       </AmazonProductListingResult>
     </template>
@@ -95,8 +99,7 @@ const payloadForm = useForm<Fields>({
 let audienceSelectorChecked = $ref(false)
 
 const replyToInputTitle = $computed(() => {
-  const title = responseTypes.find((type) => type.id === payloadForm.response_type)?.title
-  return `${title} to Reply To`
+  return
 })
 
 const isValid = $computed<boolean>(() => {

@@ -16,12 +16,13 @@ class CompositionResource extends JsonResource
             'created_at_short' => shortDateAndTime($this->created_at),
             'children' => CompositionResource::collection($this->whenLoaded('childrenCompositions')),
             'composition_result'  => new CompositionResultResource($this->whenLoaded('result')),
-            'payload' => $this->prunePayload($this->payload),
+            'payload' => $this->prunePayload($this->payload)
         ];
     }
 
-    private function prunePayload(array $payload)
+    private function prunePayload(?array $payload)
     {
+        if($payload == null) return [];
         $actualPayload = $payload;
         unset($actualPayload['max_tokens'], $actualPayload['model'], $actualPayload['n'], $actualPayload['prompt'], $actualPayload['temperature']);
         return $actualPayload;

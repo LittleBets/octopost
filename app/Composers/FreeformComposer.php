@@ -13,7 +13,7 @@ class FreeformComposer extends BaseComposer
 
         return CompositionPrompt::from([
             'model' => $payload['model'] ?? 'text-davinci-002',
-            'prompt' => $payload['prompt'] ?? '',
+            'prompt' => $payload['input_prompt'] ?? '',
             'max_tokens' => $maxTokens,
             'temperature' => 0.9,
             'n' => $payload['variations'],
@@ -22,6 +22,6 @@ class FreeformComposer extends BaseComposer
 
     protected function compositionLabel(array $payload): string
     {
-        return Str::substr($payload['prompt'], 0, 50);
+        return Str::substr($payload['input_prompt'], 0, 50);
     }
 }

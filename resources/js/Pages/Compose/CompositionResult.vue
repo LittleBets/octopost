@@ -19,7 +19,7 @@ const props = defineProps({
   result: { type: Object as PropType<CompositionResult>, required: true },
 })
 
-let choices = $ref(props.result.choices)
+let choices = $ref<CompositionResultChoice[]>(props.result.choices)
 
 watch(
   () => props.result,

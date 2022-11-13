@@ -4,7 +4,7 @@
     class="group mx-auto rounded bg-white p-4 shadow-sm hover:bg-gray-50 lg:max-w-4xl"
   >
     <div class="flex flex-col items-start">
-      <p class="mt-1 text-base leading-7 text-slate-700">
+      <p class="mt-1 text-base leading-8 text-slate-700">
         {{ text }}
       </p>
       <div

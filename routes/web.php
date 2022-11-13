@@ -25,7 +25,8 @@ Route::middleware([
     })->name('dashboard');
 
     Route::name('composition.')->prefix('/composition')->group(function () {
-        Route::get('/', [CompositionController::class, 'show'])->name('show');
+        Route::get('/', [CompositionController::class, 'showAll'])->name('showAll');
+        Route::get('/{composition_id}', [CompositionController::class, 'showOne'])->name('showOne');
         Route::post('/', [CompositionController::class, 'store'])->name('store');
         Route::patch('/{composition_id}', [CompositionController::class, 'update'])->name('update');
     });

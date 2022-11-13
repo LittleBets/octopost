@@ -1,19 +1,47 @@
 /// <reference types="vue/macros-global" />
 import type { Axios } from 'axios'
 import ziggyRoute from 'ziggy-js'
+import { CompositionTemplateType } from '@/enums'
 
 declare global {
   const axios: Axios
   const route: typeof ziggyRoute
 
-  interface Composition {
+  interface User {
+    name: string
+  }
+
+  interface CompositionPayload extends Record<string, unknown> {
+    name: string
+    audience?: string
+    response_type: string
+    composition_length: string | number
+    tone: string
+  }
+
+  interface ResponseCompositionPayload extends CompositionPayload {
+    message: string
+  }
+
+  interface AmazonListingCompositionPayload extends CompositionPayload {
+    features: string
+  }
+
+  interface FreeformCompositionPayload extends CompositionPayload {
+    input_prompt: string
+  }
+
+  interface Composition<PayloadType extends CompositionPayload = CompositionPayload> {
     id: string
-    children: Composition[]
+    children: Composition<PayloadType>[]
     created_at: string
     created_at_short: string
-    template: string
-    payload: Record<string, unknown>
+    template: CompositionTemplateType
+    label: string
+    payload: PayloadType
     composition_result: CompositionResult
+    user?: User
+    versions?: number
   }
 
   interface CompositionResult {
@@ -35,9 +63,10 @@ declare global {
     text: string
   }
 
-  type TemplateTypeIds = 'response' | 'amazon-product-listing' | 'freeform'
+  const AmazonProductListingTemplateType = 'amazon-product-listing'
+
   interface TemplateType {
-    id: TemplateTypeIds
+    id: CompositionTemplateType
     title: string
   }
 }

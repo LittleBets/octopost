@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Composers\ComposerContract;
+use App\Http\Resources\CompositionResource;
+use App\Http\Resources\CompositionResourceMinimal;
 use App\Http\Resources\CompositionResultResource;
 use App\Models\Composition;
 use App\Models\CompositionResult;
@@ -14,16 +16,35 @@ use Inertia\Response;
 
 class CompositionController extends Controller
 {
-    public function show(Request $request): Response
+    public function showAll(Request $request): Response
     {
-        return Inertia::render('Compose/ComposeShow', [
-            'model' => $request->input('model'),
+        $compositions = Composition::where('team_id', auth()->user()->current_team_id)
+            ->where('root_composition_id', null)
+            ->with('user')
+            ->withCount(['childrenCompositions as versions'])
+            ->latest()
+            ->get();
+        return Inertia::render('Composition/CompositionShowAll', [
+            'compositions' => CompositionResourceMinimal::collection($compositions)
         ]);
     }
+
+    public function showOne(Request $request): Response
+    {
+        $composition = Composition::with(['childrenCompositions' => function ($query) {
+            $query->with(['result.choices', 'user'])->latest();
+        }, 'result.choices', 'user'])
+            ->where('team_id', auth()->user()->current_team_id)
+            ->findOrFail($request->composition_id);
+        return Inertia::render('Composition/CompositionShowOne', [
+            'composition' => new CompositionResource($composition)
+        ]);
+    }
+
     public function compose(Request $request): Response
     {
-        return Inertia::render('Compose/ComposeShow', [
-            'model' => $request->input('model'),
+        return Inertia::render('Compose/ComposeNew', [
+            'model' => $request->input('model', 'fake'),
         ]);
     }
 

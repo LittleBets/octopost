@@ -1,5 +1,5 @@
 <template>
-  <AppLayout title="Compose">
+  <AppLayout>
     <div class="flex flex-1 flex-col space-y-16 overflow-y-hidden py-8">
       <Component :is="templateComposer" v-if="template">
         <template #header>
@@ -14,6 +14,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue'
 import TemplateSelector from '@/Pages/Compose/TemplateSelector.vue'
 import { computed, defineAsyncComponent } from 'vue'
+import { CompositionTemplateType } from '@/enums'
 
 const AmazonProductListingTemplate = defineAsyncComponent(
   () => import('@/Pages/Compose/Templates/ComposeAmazonProductListing.vue')
@@ -26,15 +27,17 @@ const ResponseTemplate = defineAsyncComponent(
   () => import('@/Pages/Compose/Templates/ComposeResponse.vue')
 )
 
-const template = $ref<TemplateTypeIds>('amazon-product-listing')
+const template: CompositionTemplateType = $ref<CompositionTemplateType>(
+  CompositionTemplateType.AmazonProductListing
+)
 
 const templateComposer = computed(() => {
   switch (template) {
-    case 'amazon-product-listing':
+    case CompositionTemplateType.AmazonProductListing:
       return AmazonProductListingTemplate
-    case 'freeform':
+    case CompositionTemplateType.Freeform:
       return FreeformTemplate
-    case 'response':
+    case CompositionTemplateType.Response:
       return ResponseTemplate
   }
   throw new Error(`Invalid template ID ${template}`)

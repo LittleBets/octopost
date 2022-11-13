@@ -2,6 +2,8 @@
 
 namespace App\Composers;
 
+use Illuminate\Support\Str;
+
 class ResponseComposer extends BaseComposer
 {
     public function prompt(array $payload): CompositionPrompt
@@ -22,6 +24,11 @@ class ResponseComposer extends BaseComposer
             'temperature' => 0.9,
             'n' => $payload['variations'],
         ]);
+    }
+
+    protected function compositionLabel(array $payload): string
+    {
+        return Str::substr($payload['message'], 0, 15);
     }
 }
 

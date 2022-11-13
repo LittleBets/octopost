@@ -11,7 +11,7 @@ class Composition extends BaseModel
 
     protected $casts = ['payload' => 'array'];
 
-    public function composer()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

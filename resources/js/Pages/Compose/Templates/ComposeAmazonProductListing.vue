@@ -42,7 +42,10 @@
     <template v-if="compositionResult" #result>
       <AmazonProductListingResult :result="compositionResult" :version="compositionVersion">
         <template #footer>
-          <ResultFooter :composition-version="compositionVersion" />
+          <ResultFooter
+            :composition-version="compositionVersion"
+            :composition-id="rootCompositionId"
+          />
         </template>
       </AmazonProductListingResult>
     </template>
@@ -111,7 +114,7 @@ async function submit() {
     })
     const { data } = await axios.post(route('composition.store'), {
       template,
-      payload: payloadForm,
+      payload: payloadForm.data(),
       root_composition_id: rootCompositionId,
       model,
     })

@@ -5,7 +5,7 @@
         <slot name="header" />
         <Textarea
           ref="promptRef"
-          v-model="payloadForm.prompt"
+          v-model="payloadForm.input_prompt"
           label="Prompt"
           name="prompt"
           :rows="20"
@@ -45,7 +45,10 @@ Include keywords cute, cuddly, fury, kittens"
     <template v-if="compositionResult" #result>
       <AmazonProductListingResult :result="compositionResult" :version="compositionVersion">
         <template #footer>
-          <ResultFooter :composition-version="compositionVersion" />
+          <ResultFooter
+            :composition-version="compositionVersion"
+            :composition-id="rootCompositionId"
+          />
         </template>
       </AmazonProductListingResult>
     </template>
@@ -83,11 +86,11 @@ const model = $computed(() => pageProps.value.model)
 const payloadForm = useForm<Fields>({
   variations: initial?.payload?.variations ?? 1,
   composition_length: initial?.payload?.composition_length ?? 500,
-  prompt: initial?.payload?.prompt ?? '',
+  input_prompt: initial?.payload?.input_prompt ?? '',
 })
 
 const isValid = $computed<boolean>(() => {
-  return payloadForm.prompt.trim() !== ''
+  return payloadForm.input_prompt.trim() !== ''
 })
 
 let processing = $ref(false)
@@ -98,12 +101,6 @@ const canSubmit = $computed(() => {
 async function submit() {
   processing = true
   try {
-    // payloadForm.transform((data) => {
-    //   return {
-    //     ...data,
-    //     audience: audienceSelectorChecked ? data.audience : undefined,
-    //   }
-    // })
     const { data } = await axios.post(route('composition.store'), {
       template,
       payload: payloadForm,
@@ -157,7 +154,7 @@ interface Props {
 }
 
 interface Fields {
-  prompt: string
+  input_prompt: string
   variations: number
   model?: string
   composition_length: number
