@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -11,8 +10,7 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table
                 ->uuid('id')
-                ->primary()
-                ->default(new Expression('uuid_generate_v4()'));
+                ->primary();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

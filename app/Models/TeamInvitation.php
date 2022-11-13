@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Laravel\Jetstream\Jetstream;
 use Laravel\Jetstream\TeamInvitation as JetstreamTeamInvitation;
 
 class TeamInvitation extends JetstreamTeamInvitation
 {
-
-    protected $keyType = 'string';
+    use HasUuids;
 
     protected $fillable = ['email', 'role',];
 
@@ -16,5 +16,4 @@ class TeamInvitation extends JetstreamTeamInvitation
     {
         return $this->belongsTo(Jetstream::teamModel());
     }
-
 }
