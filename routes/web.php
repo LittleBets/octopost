@@ -20,10 +20,6 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-
     Route::name('composition.')->prefix('/composition')->group(function () {
         Route::get('/', [CompositionController::class, 'showAll'])->name('showAll');
         Route::get('/{composition_id}', [CompositionController::class, 'showOne'])->name('showOne');

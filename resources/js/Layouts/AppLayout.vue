@@ -10,16 +10,13 @@
             <div class="flex">
               <!-- Logo -->
               <div class="flex shrink-0 items-center">
-                <Link :href="route('dashboard')">
+                <Link :href="route('compose.new')">
                   <ApplicationMark class="block h-9 w-auto" />
                 </Link>
               </div>
 
               <!-- Navigation Links -->
               <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                  Dashboard
-                </NavLink>
                 <NavLink :href="route('compose.new')" :active="route().current('compose.new')">
                   Compose
                 </NavLink>
@@ -211,9 +208,6 @@
           class="sm:hidden"
         >
           <div class="space-y-1 pt-2 pb-3">
-            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-              Dashboard
-            </ResponsiveNavLink>
             <ResponsiveNavLink
               :href="route('compose.new')"
               :active="route().current('compose.new')"
