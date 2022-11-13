@@ -1,5 +1,5 @@
 <template>
-  <AppLayout>
+  <AppLayout :title="`Composition - ${composition.label}`">
     <div class="h-full bg-white bg-gray-50 py-12">
       <div class="mx-auto flex h-full max-w-7xl gap-4 sm:px-6 lg:px-8">
         <div class="flex w-1/3 flex-col overflow-y-hidden">

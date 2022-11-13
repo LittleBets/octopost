@@ -1,5 +1,5 @@
 <template>
-  <AppLayout>
+  <AppLayout title="Compose">
     <div class="flex flex-1 flex-col space-y-16 overflow-y-hidden py-8">
       <Component :is="templateComposer" v-if="template">
         <template #header>
