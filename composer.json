@@ -9,6 +9,7 @@
   "license": "MIT",
   "require": {
     "php": "^8.1",
+    "fakerphp/faker": "^v1.20",
     "guzzlehttp/guzzle": "^7.5",
     "inertiajs/inertia-laravel": "^0.6",
     "itsgoingd/clockwork": "^5.1",
@@ -17,8 +18,8 @@
     "laravel/sanctum": "^3.0",
     "laravel/tinker": "^2.7",
     "openai-php/client": "^0.1.0",
-    "tightenco/ziggy": "^1.5",
-    "fakerphp/faker": "^v1.20"
+    "staudenmeir/belongs-to-through": "^2.5",
+    "tightenco/ziggy": "^1.5"
   },
   "require-dev": {
     "laravel/pint": "^1.2",

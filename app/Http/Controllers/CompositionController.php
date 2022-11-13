@@ -20,6 +20,7 @@ class CompositionController extends Controller
     {
         $compositions = Composition::where('team_id', auth()->user()->current_team_id)
             ->where('root_composition_id', null)
+            ->where('team_id', auth()->user()->current_team_id)
             ->with('user')
             ->withCount(['childrenCompositions as versions'])
             ->latest()
@@ -61,8 +62,6 @@ class CompositionController extends Controller
         ['composition' => $composition, 'result' => $result] = $composer->compose($payload, $rootCompositionId);
 
         $result = CompositionResult::with(['choices'])->find($result->id);
-//        $newCompositionResult = Composition::with(['result.choices', 'childrenCompositions.result.choices'])
-//            ->find($newCompositionId);
         $childrenCount = Composition::where('root_composition_id', $rootCompositionId ?? $result->composition_id)->count();
         return response()->json([
             'composition_version' => $childrenCount + 1,
@@ -75,7 +74,9 @@ class CompositionController extends Controller
     public function update(Request $request)
     {
         $newAttributes = $request->all(['label']);
-        Composition::where('id', $request->composition_id)->update($newAttributes);
+        Composition::where('id', $request->composition_id)
+            ->where('team_id', auth()->user()->current_team_id)
+            ->update($newAttributes);
         return response()->json($newAttributes);
     }
 }
