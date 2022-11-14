@@ -54,9 +54,9 @@ const audiences = [
 ]
 
 const compositionLengths = [
-  { key: 'short', name: 'Short', description: 'About 1-2 sentences. Cost: ~100 credits' },
-  { key: 'medium', name: 'Medium', description: 'About 2-4 sentences. Cost: ~160 credits' },
-  { key: 'long', name: 'Long', description: 'About 3-5 sentences. Cost: ~240 credits' },
+  { id: 'short', title: 'Short', description: 'About 1-2 sentences. Cost: ~100 credits' },
+  { id: 'medium', title: 'Medium', description: 'About 2-4 sentences. Cost: ~160 credits' },
+  { id: 'long', title: 'Long', description: 'About 3-5 sentences. Cost: ~240 credits' },
 ]
 
 const responseTypes = [

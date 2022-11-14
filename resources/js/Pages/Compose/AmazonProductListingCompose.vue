@@ -1,25 +1,22 @@
 <template>
   <ComposerShell :root-composition-id="rootCompositionId" :composition-label="compositionLabel">
     <form class="flex h-full flex-col overflow-y-auto" @submit.prevent="submit">
-      <div class="flex flex-1 flex-col space-y-6 overflow-y-auto bg-white py-6 px-4 sm:p-6">
+      <div class="flex h-full flex-1 flex-col space-y-6 overflow-y-auto bg-white py-6 px-4 sm:p-6">
         <slot name="header" />
+        <TextInput ref="productNameRef" v-model="payloadForm.name" label="Product Name" required />
         <Textarea
-          ref="promptRef"
-          v-model="payloadForm.input_prompt"
-          label="Prompt"
-          name="prompt"
-          :rows="20"
-          placeholder="e.g. In a friendly and witty tone, write a blog post convincing old ladies to get a cat as their best friend.
-Include keywords cute, cuddly, fury, kittens"
+          v-model="payloadForm.features"
+          label="Product Features"
+          name="product_features"
+          :rows="8"
           required
         />
-        <TextInput
-          v-model.number="payloadForm.composition_length"
-          label="Max Number of Tokens"
-          :min="20"
-          required
-          type="number"
+        <ToneSelector v-model="payloadForm.tone" />
+        <AudienceSelector
+          v-model="payloadForm.audience"
+          v-model:checked="audienceSelectorChecked"
         />
+        <LengthSelector v-model="payloadForm.composition_length" />
         <TextInput
           v-model.number="payloadForm.variations"
           label="Number of Variations"
@@ -43,14 +40,14 @@ Include keywords cute, cuddly, fury, kittens"
       </div>
     </form>
     <template v-if="compositionResult" #result>
-      <AmazonProductListingResult :result="compositionResult" :version="compositionVersion">
+      <CompositionResult :result="compositionResult" :version="compositionVersion">
         <template #footer>
           <ResultFooter
             :composition-version="compositionVersion"
             :composition-id="rootCompositionId"
           />
         </template>
-      </AmazonProductListingResult>
+      </CompositionResult>
     </template>
     <template v-else #emptyResult>
       <EmptyResult />
@@ -63,20 +60,24 @@ import { $computed } from 'vue/macros'
 import { nextTick } from 'vue'
 import TextInput from '@/Components/TextInput.vue'
 import CompositionCostCounter from '@/Components/CompositionCostCounter.vue'
+import ToneSelector from '@/Pages/Compose/ToneSelector.vue'
 import Textarea from '@/Components/Textarea.vue'
+import AudienceSelector from '@/Pages/Compose/AudienceSelector.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
-import AmazonProductListingResult from '@/Pages/Compose/CompositionResult.vue'
+import LengthSelector from '@/Pages/Compose/LengthSelector.vue'
+import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
 import LinkButton from '@/Components/LinkButton.vue'
 import ResultFooter from '@/Pages/Compose/ResultFooter.vue'
 import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
+import { tones } from '@/Pages/Compose/templates'
 import { useForm, usePage } from '@inertiajs/inertia-vue3'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 
 const { initial } = defineProps<Props>()
 
-const template = 'freeform'
+const template = 'amazon-product-listing'
 
 let compositionResult = $ref<CompositionResult | undefined>(undefined)
 let rootCompositionId = $ref<string | undefined>(undefined)
@@ -84,13 +85,17 @@ let compositionVersion = $ref<number | undefined>(undefined)
 const model = $computed(() => pageProps.value.model)
 
 const payloadForm = useForm<Fields>({
+  name: initial?.payload?.name ?? '',
+  tone: initial?.payload?.tone ?? tones[0].id,
+  features: initial?.payload?.features ?? '',
   variations: initial?.payload?.variations ?? 1,
-  composition_length: initial?.payload?.composition_length ?? 500,
-  input_prompt: initial?.payload?.input_prompt ?? '',
+  audience: initial?.payload?.audience ?? undefined,
+  composition_length: initial?.payload?.composition_length ?? 'short',
 })
+let audienceSelectorChecked = $ref(false)
 
 const isValid = $computed<boolean>(() => {
-  return payloadForm.input_prompt.trim() !== ''
+  return payloadForm.name.trim() !== '' && payloadForm.features.trim() !== ''
 })
 
 let processing = $ref(false)
@@ -101,9 +106,15 @@ const canSubmit = $computed(() => {
 async function submit() {
   processing = true
   try {
+    payloadForm.transform((data) => {
+      return {
+        ...data,
+        audience: audienceSelectorChecked ? data.audience : undefined,
+      }
+    })
     const { data } = await axios.post(route('compositions.store'), {
       template,
-      payload: payloadForm,
+      payload: payloadForm.data(),
       root_composition_id: rootCompositionId,
       model,
     })
@@ -130,6 +141,7 @@ function startNewHandler() {
 
 function resetPayloadForm() {
   payloadForm.reset()
+  audienceSelectorChecked = false
 }
 
 function resetResult() {
@@ -140,10 +152,10 @@ function resetResult() {
 
 let compositionLabel = $ref<string | undefined>()
 
-const promptRef = $ref<HTMLElement>()
+const productNameRef = $ref<HTMLElement>()
 function setFocus() {
   nextTick(() => {
-    promptRef?.focus()
+    productNameRef?.focus()
   })
 }
 
@@ -154,9 +166,12 @@ interface Props {
 }
 
 interface Fields {
-  input_prompt: string
+  name: string
+  tone: string
+  features: string
   variations: number
+  audience?: string
   model?: string
-  composition_length: number
+  composition_length: string
 }
 </script>

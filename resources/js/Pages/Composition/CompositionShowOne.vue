@@ -53,7 +53,7 @@ import { type Component, defineAsyncComponent, PropType } from 'vue'
 import CompositionShowOneVersionItem from '@/Pages/Composition/CompositionShowOneVersionItem.vue'
 import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
 import { $computed } from 'vue/macros'
-import { templates } from '@/Pages/Compose/Templates/templates'
+import { templates } from '@/Pages/Compose/templates'
 import { CompositionTemplateType } from '@/enums'
 import CompositionOptions from '@/Pages/Composition/CompositionOptions.vue'
 

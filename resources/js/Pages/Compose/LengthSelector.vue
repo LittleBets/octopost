@@ -1,12 +1,11 @@
 <template>
-  <RadioGroupSelector v-model="selected" :options="compositionLengths" :label="title" />
+  <ListItemSelector v-model="selected" :options="compositionLengths" :title="title" />
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { compositionLengths } from '@/Pages/Compose/Templates/templates'
-import RadioGroupSelector from '@/Components/RadioGroupSelector.vue'
-
+import { compositionLengths } from '@/Pages/Compose/templates'
+import ListItemSelector from '@/Pages/Compose/ListItemSelector.vue'
 interface Props {
   title?: string
   modelValue: string

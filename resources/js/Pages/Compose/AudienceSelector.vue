@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { audiences } from '@/Pages/Compose/Templates/templates'
+import { audiences } from '@/Pages/Compose/templates'
 import ListItemSelector from '@/Pages/Compose/ListItemSelector.vue'
 
 const { title = 'Target Audience', modelValue = null, checked = false } = defineProps<Props>()

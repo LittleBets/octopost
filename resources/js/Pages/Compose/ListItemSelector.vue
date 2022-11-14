@@ -51,19 +51,25 @@
                 'group relative cursor-default select-none py-3 pl-3 pr-9',
               ]"
             >
-              <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">
-                {{ option.title }}
-              </span>
-
-              <span
-                v-if="selected"
-                :class="[
-                  active ? 'text-white' : 'text-gray-600',
-                  'absolute inset-y-0 right-0 flex items-center pr-4',
-                ]"
-              >
-                <icon aria-hidden="true" class="h-5 w-5" icon="ph:check" />
-              </span>
+              <div class="flex">
+                <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">
+                  {{ option.title }}
+                </span>
+                <span
+                  v-if="selected"
+                  :class="[
+                    active ? 'text-white' : 'text-gray-600',
+                    'absolute inset-y-0 right-0 flex items-center pr-4',
+                  ]"
+                >
+                  <icon aria-hidden="true" class="h-5 w-5" icon="ph:check" />
+                </span>
+              </div>
+              <slot name="description" :selected="selected" :active="active" :item="option">
+                <span :class="[active ? 'text-white' : 'text-gray-500', 'block text-sm']">
+                  {{ option.description }}
+                </span>
+              </slot>
             </li>
           </ListboxOption>
         </ListboxOptions>

@@ -1,14 +1,10 @@
 <template>
-  <ListItemSelector
-    v-model='selected'
-    :options='templates'
-    :title='title'
-  />
+  <ListItemSelector v-model="selected" :options="templates" :title="title" />
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { computed } from 'vue'
-import { templates } from '@/Pages/Compose/Templates/templates'
+import { templates } from '@/Pages/Compose/templates'
 import ListItemSelector from '@/Pages/Compose/ListItemSelector.vue'
 
 interface Props {
@@ -27,5 +23,4 @@ const selected = computed({
     emit('update:modelValue', val)
   },
 })
-
 </script>

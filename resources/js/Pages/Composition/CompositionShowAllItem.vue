@@ -44,7 +44,7 @@
 import { PropType } from 'vue'
 import { Icon } from '@iconify/vue'
 import { $computed } from 'vue/macros'
-import { templates } from '@/Pages/Compose/Templates/templates'
+import { templates } from '@/Pages/Compose/templates'
 
 const props = defineProps({
   composition: {

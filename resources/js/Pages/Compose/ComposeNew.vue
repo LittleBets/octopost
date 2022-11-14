@@ -17,15 +17,11 @@ import { computed, defineAsyncComponent } from 'vue'
 import { CompositionTemplateType } from '@/enums'
 
 const AmazonProductListingTemplate = defineAsyncComponent(
-  () => import('@/Pages/Compose/Templates/ComposeAmazonProductListing.vue')
+  () => import('@/Pages/Compose/AmazonProductListingCompose.vue')
 )
-const FreeformTemplate = defineAsyncComponent(
-  () => import('@/Pages/Compose/Templates/ComposeFreeform.vue')
-)
+const FreeformTemplate = defineAsyncComponent(() => import('@/Pages/Compose/FreeformCompose.vue'))
 
-const ResponseTemplate = defineAsyncComponent(
-  () => import('@/Pages/Compose/Templates/ComposeResponse.vue')
-)
+const ResponseTemplate = defineAsyncComponent(() => import('@/Pages/Compose/ResponseCompose.vue'))
 
 const template: CompositionTemplateType = $ref<CompositionTemplateType>(
   CompositionTemplateType.Response

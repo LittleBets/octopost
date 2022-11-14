@@ -1,7 +1,7 @@
 <template>
   <ComposerShell :root-composition-id="rootCompositionId" :composition-label="compositionLabel">
     <form class="flex h-full flex-col overflow-y-auto" @submit.prevent="submit">
-      <div class="flex flex-col space-y-6 overflow-y-auto bg-white py-6 px-4 sm:p-6">
+      <div class="flex h-full flex-1 flex-col space-y-6 overflow-y-auto bg-white py-6 px-4 sm:p-6">
         <slot name="header" />
         <ResponseTypeSelector v-model="payloadForm.response_type" />
         <Textarea
@@ -11,7 +11,6 @@
           name="message"
           :rows="12"
           required
-          class="flex-1"
         />
         <ToneSelector v-model="payloadForm.tone" />
         <AudienceSelector
@@ -43,14 +42,14 @@
       </div>
     </form>
     <template v-if="compositionResult" #result>
-      <AmazonProductListingResult :result="compositionResult" :version="compositionVersion">
+      <CompositionResult :result="compositionResult" :version="compositionVersion">
         <template #footer>
           <ResultFooter
             :composition-version="compositionVersion"
             :composition-id="rootCompositionId"
           />
         </template>
-      </AmazonProductListingResult>
+      </CompositionResult>
     </template>
     <template v-else #emptyResult>
       <EmptyResult />
@@ -68,12 +67,12 @@ import Textarea from '@/Components/Textarea.vue'
 import AudienceSelector from '@/Pages/Compose/AudienceSelector.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import LengthSelector from '@/Pages/Compose/LengthSelector.vue'
-import AmazonProductListingResult from '@/Pages/Compose/CompositionResult.vue'
+import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
 import LinkButton from '@/Components/LinkButton.vue'
 import ResultFooter from '@/Pages/Compose/ResultFooter.vue'
 import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
-import { tones, responseTypes } from '@/Pages/Compose/Templates/templates'
+import { tones, responseTypes } from '@/Pages/Compose/templates'
 import { useForm, usePage } from '@inertiajs/inertia-vue3'
 import ResponseTypeSelector from '@/Pages/Compose/ResponseTypeSelector.vue'
 

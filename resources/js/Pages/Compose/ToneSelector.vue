@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { tones } from '@/Pages/Compose/Templates/templates'
+import { tones } from '@/Pages/Compose/templates'
 import ListItemSelector from '@/Pages/Compose/ListItemSelector.vue'
 
 interface Props {
