@@ -52,7 +52,7 @@ class CompositionController extends Controller
             ;
         }
         return Inertia::render('Compose/ComposeNew', [
-            'model' => $request->input('model', 'fake'),
+            'model' => $request->input('model'),
             'composition' => $composition ? new CompositionResource($composition) : null
         ]);
     }
