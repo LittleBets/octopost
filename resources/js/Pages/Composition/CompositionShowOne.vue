@@ -6,7 +6,7 @@
           <div class="flex items-center justify-between">
             <div class="space-y-2 font-medium text-gray-800">
               <div class="text-lg">
-                {{ composition.label }}
+                {{ label }}
               </div>
               <div
                 class="inline-flex rounded-full bg-gray-100 px-2 text-xs font-semibold leading-5 text-gray-800"
@@ -14,7 +14,7 @@
                 {{ typeLabel }}
               </div>
             </div>
-            <CompositionOptions :composition="composition" />
+            <CompositionOptions v-model:label="label" :composition="composition" />
           </div>
           <div class="pl-8 pt-8 pb-4 text-sm font-medium text-gray-800">versions</div>
           <ul role="list" class="overflow-y-auto pb-8">
@@ -99,4 +99,6 @@ const resultHeader = $computed<Component>(() => {
   }
   return null
 })
+
+const label = $ref<string | undefined>(props.composition.label)
 </script>

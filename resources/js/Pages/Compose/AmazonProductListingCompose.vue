@@ -46,7 +46,7 @@
 
 <script lang="ts" setup>
 import { $computed } from 'vue/macros'
-import { nextTick, reactive } from 'vue'
+import { nextTick, PropType, reactive } from 'vue'
 import TextInput from '@/Components/TextInput.vue'
 import ToneSelector from '@/Pages/Compose/ToneSelector.vue'
 import Textarea from '@/Components/Textarea.vue'
@@ -62,22 +62,28 @@ import { CompositionTemplateType } from '@/enums'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 
-const { initial } = defineProps<Props>()
+const props = defineProps({
+  baseComposition: {
+    type: Object as PropType<Composition<AmazonListingCompositionPayload>>,
+    default: () => undefined,
+  },
+  rootCompositionId: { type: String, default: undefined },
+})
 
 const template = 'amazon-product-listing'
 
 let compositionResult = $ref<CompositionResult | undefined>(undefined)
-let rootCompositionId = $ref<string | undefined>(undefined)
+let rootCompositionId = $ref<string | undefined>(props.rootCompositionId)
 let compositionVersion = $ref<number | undefined>(undefined)
 const model = $computed(() => pageProps.value.model)
 
 const payloadForm = reactive<Fields>({
-  name: initial?.payload?.name ?? '',
-  tone: initial?.payload?.tone ?? tones[0].id,
-  features: initial?.payload?.features ?? '',
-  variations: initial?.payload?.variations ?? 1,
-  audience: initial?.payload?.audience ?? undefined,
-  composition_length: initial?.payload?.composition_length ?? 'short',
+  name: props.baseComposition?.payload?.name ?? '',
+  tone: props.baseComposition?.payload?.tone ?? tones[0].id,
+  features: props.baseComposition?.payload?.features ?? '',
+  variations: props.baseComposition?.payload?.variations ?? 1,
+  audience: props.baseComposition?.payload?.audience ?? undefined,
+  composition_length: String(props.baseComposition?.payload?.composition_length) ?? 'short',
 })
 let audienceSelectorChecked = $ref(false)
 
@@ -139,7 +145,7 @@ function resetResult() {
   compositionVersion = undefined
 }
 
-let compositionLabel = $ref<string | undefined>()
+let compositionLabel = $ref<string | undefined>(props.baseComposition?.label)
 
 const productNameRef = $ref<HTMLElement>()
 function setFocus() {
@@ -149,10 +155,6 @@ function setFocus() {
 }
 
 setFocus()
-
-interface Props {
-  initial?: { payload: Fields; isValid: boolean }
-}
 
 interface Fields {
   name: string

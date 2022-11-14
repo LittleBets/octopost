@@ -17,6 +17,7 @@ declare global {
     response_type: string
     composition_length: string | number
     tone: string
+    variations: number
   }
 
   interface ResponseCompositionPayload extends CompositionPayload {

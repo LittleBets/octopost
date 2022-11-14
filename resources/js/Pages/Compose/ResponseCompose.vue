@@ -51,7 +51,7 @@
 
 <script lang="ts" setup>
 import { $computed } from 'vue/macros'
-import { nextTick, reactive } from 'vue'
+import { nextTick, PropType, reactive } from 'vue'
 import TextInput from '@/Components/TextInput.vue'
 import ToneSelector from '@/Pages/Compose/ToneSelector.vue'
 import Textarea from '@/Components/Textarea.vue'
@@ -68,22 +68,28 @@ import { CompositionTemplateType } from '@/enums'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 
-const { initial } = defineProps<Props>()
+const props = defineProps({
+  baseComposition: {
+    type: Object as PropType<Composition<ResponseCompositionPayload>>,
+    default: () => undefined,
+  },
+  rootCompositionId: { type: String, default: undefined },
+})
 
 const template = 'response'
 
 let compositionResult = $ref<CompositionResult | undefined>(undefined)
-let rootCompositionId = $ref<string | undefined>(undefined)
+let rootCompositionId = $ref<string | undefined>(props.rootCompositionId)
 let compositionVersion = $ref<number | undefined>(undefined)
 const model = $computed(() => pageProps.value.model)
 
 const payloadForm = reactive<Fields>({
-  tone: initial?.payload?.tone ?? tones[0].id,
-  response_type: initial?.payload?.response_type ?? responseTypes[0].id,
-  message: initial?.payload?.message ?? '',
-  variations: initial?.payload?.variations ?? 1,
-  audience: initial?.payload?.audience ?? undefined,
-  composition_length: initial?.payload?.composition_length ?? 'short',
+  tone: props.baseComposition?.payload?.tone ?? tones[0].id,
+  response_type: props.baseComposition?.payload?.response_type ?? responseTypes[0].id,
+  message: props.baseComposition?.payload?.message ?? '',
+  variations: props.baseComposition?.payload?.variations ?? 1,
+  audience: props.baseComposition?.payload?.audience ?? undefined,
+  composition_length: String(props.baseComposition?.payload?.composition_length) ?? 'short',
 })
 let audienceSelectorChecked = $ref(false)
 
@@ -145,7 +151,7 @@ function resetResult() {
   compositionVersion = undefined
 }
 
-let compositionLabel = $ref<string | undefined>()
+let compositionLabel = $ref<string | undefined>(props.baseComposition?.label)
 
 const messageRef = $ref<HTMLElement>()
 
@@ -156,10 +162,6 @@ function setFocus() {
 }
 
 setFocus()
-
-interface Props {
-  initial?: { payload: Fields; isValid: boolean }
-}
 
 interface Fields {
   tone: string

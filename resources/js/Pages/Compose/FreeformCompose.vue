@@ -52,7 +52,7 @@ Include keywords cute, cuddly, fury, kittens"
 
 <script lang="ts" setup>
 import { $computed } from 'vue/macros'
-import { nextTick, reactive } from 'vue'
+import { nextTick, PropType, reactive } from 'vue'
 import TextInput from '@/Components/TextInput.vue'
 import Textarea from '@/Components/Textarea.vue'
 import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
@@ -64,19 +64,24 @@ import { CompositionTemplateType } from '@/enums'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 
-const { initial } = defineProps<Props>()
-
+const props = defineProps({
+  baseComposition: {
+    type: Object as PropType<Composition<FreeformCompositionPayload>>,
+    default: () => undefined,
+  },
+  rootCompositionId: { type: String, default: undefined },
+})
 const template = 'freeform'
 
 let compositionResult = $ref<CompositionResult | undefined>(undefined)
-let rootCompositionId = $ref<string | undefined>(undefined)
+let rootCompositionId = $ref<string | undefined>(props.rootCompositionId)
 let compositionVersion = $ref<number | undefined>(undefined)
 const model = $computed(() => pageProps.value.model)
 
 const payloadForm = reactive<Fields>({
-  variations: initial?.payload?.variations ?? 1,
-  composition_length: initial?.payload?.composition_length ?? 500,
-  input_prompt: initial?.payload?.input_prompt ?? '',
+  variations: props.baseComposition?.payload?.variations ?? 1,
+  composition_length: Number(props.baseComposition?.payload?.composition_length) ?? 500,
+  input_prompt: props.baseComposition?.payload?.input_prompt ?? '',
 })
 
 const isValid = $computed<boolean>(() => {
@@ -130,7 +135,7 @@ function resetResult() {
   compositionVersion = undefined
 }
 
-let compositionLabel = $ref<string | undefined>()
+let compositionLabel = $ref<string | undefined>(props.baseComposition?.label)
 
 const promptRef = $ref<HTMLElement>()
 
@@ -141,10 +146,6 @@ function setFocus() {
 }
 
 setFocus()
-
-interface Props {
-  initial?: { payload: Fields; isValid: boolean }
-}
 
 interface Fields {
   input_prompt: string

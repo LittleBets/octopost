@@ -41,6 +41,12 @@
       </MenuItems>
     </transition>
   </Menu>
+  <CompositionLabelUpdateModal
+    v-model="label"
+    :show="showingLabelDialog"
+    :composition-id="composition.id"
+    @close="showingLabelDialog = false"
+  />
   <DialogModal :show="confirmingDelete" @close="closeDeleteConfirmationModal">
     <template #title>Delete Composition</template>
 
@@ -76,13 +82,35 @@ import { computed, PropType, ref } from 'vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { useForm } from '@inertiajs/inertia-vue3'
 import route from 'ziggy-js'
+import { Inertia } from '@inertiajs/inertia'
+import CompositionLabelUpdateModal from '@/Pages/Compose/CompositionLabelUpdateModal.vue'
+import { $computed } from 'vue/macros'
 
 const props = defineProps({
   composition: { type: Object as PropType<Composition>, required: true },
+  label: { type: String, required: true },
 })
+
+const emit = defineEmits<{
+  (event: 'update:label', label: string): void
+}>()
 
 const options = computed(() => {
   return [
+    {
+      label: 'Compose New Version',
+      icon: 'ph:note-pencil',
+      clickHandler: () => {
+        Inertia.visit(route('compose.new', { composition: props.composition.id }))
+      },
+    },
+    {
+      label: 'Update Label...',
+      icon: 'ph:pencil-simple',
+      clickHandler: () => {
+        showingLabelDialog = true
+      },
+    },
     {
       label: 'Delete Composition',
       icon: 'ph:trash-simple',
@@ -107,4 +135,13 @@ function deletePost() {
 function closeDeleteConfirmationModal() {
   confirmingDelete.value = false
 }
+
+let showingLabelDialog = $ref(false)
+
+const label = $computed({
+  get: () => props.label,
+  set: (value) => {
+    emit('update:label', value)
+  },
+})
 </script>

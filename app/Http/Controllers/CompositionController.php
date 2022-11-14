@@ -44,8 +44,16 @@ class CompositionController extends Controller
 
     public function compose(Request $request): Response
     {
+        $composition = null;
+        $compositionId = $request->input('composition');
+        if($compositionId !== null) {
+            $composition = Composition::where('team_id', auth()->user()->current_team_id)
+                ->findOrFail($compositionId)
+            ;
+        }
         return Inertia::render('Compose/ComposeNew', [
-            'model' => $request->input('model'),
+            'model' => $request->input('model', 'fake'),
+            'composition' => $composition ? new CompositionResource($composition) : null
         ]);
     }
 
