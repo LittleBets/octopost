@@ -51,7 +51,7 @@ function closeDialog() {
 
 async function update() {
   try {
-    const { data } = await axios.patch(route('composition.update', compositionId), {
+    const { data } = await axios.patch(route('compositions.update', compositionId), {
       label: label.trim(),
     })
     closeDialog()

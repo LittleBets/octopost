@@ -15,7 +15,7 @@
       label="Prompt"
       name="prompt"
       :rows="20"
-      placeholder="e.g. In a friendly and witty tone, write a blog post convincing old ladies to get a cat as their best friend.
+      placeholder="e.g. In a friendly tone, write a blog post convincing old ladies to get a cat as their best friend.
 Include keywords cute, cuddly, fury, kittens"
       required
     />
