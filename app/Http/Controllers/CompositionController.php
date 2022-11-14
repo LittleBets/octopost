@@ -45,7 +45,7 @@ class CompositionController extends Controller
     public function compose(Request $request): Response
     {
         return Inertia::render('Compose/ComposeNew', [
-            'model' => $request->input('model', 'fake'),
+            'model' => $request->input('model'),
         ]);
     }
 
