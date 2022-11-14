@@ -112,7 +112,7 @@ async function submit() {
         audience: audienceSelectorChecked ? data.audience : undefined,
       }
     })
-    const { data } = await axios.post(route('composition.store'), {
+    const { data } = await axios.post(route('compositions.store'), {
       template,
       payload: payloadForm.data(),
       root_composition_id: rootCompositionId,

@@ -3,15 +3,18 @@
     <div class="h-full bg-white bg-gray-50 py-12">
       <div class="mx-auto flex h-full max-w-7xl gap-4 sm:px-6 lg:px-8">
         <div class="flex w-1/3 flex-col overflow-y-hidden">
-          <div class="space-y-2 font-medium text-gray-800">
-            <div class="text-lg">
-              {{ composition.label }}
+          <div class="flex items-center justify-between">
+            <div class="space-y-2 font-medium text-gray-800">
+              <div class="text-lg">
+                {{ composition.label }}
+              </div>
+              <div
+                class="inline-flex rounded-full bg-gray-100 px-2 text-xs font-semibold leading-5 text-gray-800"
+              >
+                {{ typeLabel }}
+              </div>
             </div>
-            <p
-              class="inline-flex rounded-full bg-gray-100 px-2 text-xs font-semibold leading-5 text-gray-800"
-            >
-              {{ typeLabel }}
-            </p>
+            <CompositionOptions :composition="composition" />
           </div>
           <div class="pl-8 pt-8 pb-4 text-sm font-medium text-gray-800">versions</div>
           <ul role="list" class="overflow-y-auto pb-8">
@@ -52,6 +55,7 @@ import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
 import { $computed } from 'vue/macros'
 import { templates } from '@/Pages/Compose/Templates/templates'
 import { CompositionTemplateType } from '@/enums'
+import CompositionOptions from '@/Pages/Composition/CompositionOptions.vue'
 
 const props = defineProps({
   composition: {

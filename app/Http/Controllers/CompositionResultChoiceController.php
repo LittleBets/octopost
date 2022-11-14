@@ -16,12 +16,12 @@ class CompositionResultChoiceController extends Controller
                 $query->where('team_id', auth()->user()->current_team_id);
             })
             ->update($newAttributes);
-        return response()->json($newAttributes);
+        return back()->with($newAttributes);
     }
 
     public function destroy(Request $request)
     {
         CompositionResultChoice::where('id', $request->composition_result_choice_id)->delete();
-        return response()->json();
+        return back();
     }
 }

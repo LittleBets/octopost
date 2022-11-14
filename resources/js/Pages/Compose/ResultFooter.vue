@@ -5,7 +5,7 @@
       {{ compositionVersion }}.
       <LinkButton
         as="anchor"
-        :href="route('composition.showOne', compositionId)"
+        :href="route('compositions.show-one', compositionId)"
         label="Check out"
         underline
         :target="compositionId"

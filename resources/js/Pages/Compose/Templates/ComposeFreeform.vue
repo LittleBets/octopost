@@ -101,7 +101,7 @@ const canSubmit = $computed(() => {
 async function submit() {
   processing = true
   try {
-    const { data } = await axios.post(route('composition.store'), {
+    const { data } = await axios.post(route('compositions.store'), {
       template,
       payload: payloadForm,
       root_composition_id: rootCompositionId,

@@ -21,8 +21,8 @@
                   Compose
                 </NavLink>
                 <NavLink
-                  :href="route('composition.showAll')"
-                  :active="route().current('composition.showAll')"
+                  :href="route('compositions.show-all')"
+                  :active="route().current('compositions.show-all')"
                 >
                   Compositions
                 </NavLink>
@@ -215,8 +215,8 @@
               Compose
             </ResponsiveNavLink>
             <ResponsiveNavLink
-              :href="route('composition.showAll')"
-              :active="route().current('composition.showAll')"
+              :href="route('compositions.show-all')"
+              :active="route().current('compositions.show-all')"
             >
               Compositions
             </ResponsiveNavLink>

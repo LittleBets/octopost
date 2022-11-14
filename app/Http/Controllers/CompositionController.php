@@ -33,7 +33,7 @@ class CompositionController extends Controller
     public function showOne(Request $request): Response
     {
         $composition = Composition::with(['childrenCompositions' => function ($query) {
-            $query->with(['result.choices', 'user'])->latest();
+            $query->with(['result.choices', 'user'])->latest('updated_at');
         }, 'result.choices', 'user'])
             ->where('team_id', auth()->user()->current_team_id)
             ->findOrFail($request->composition_id);
@@ -78,5 +78,13 @@ class CompositionController extends Controller
             ->where('team_id', auth()->user()->current_team_id)
             ->update($newAttributes);
         return response()->json($newAttributes);
+    }
+
+    public function destroy(Request $request)
+    {
+        Composition::where('id', $request->composition_id)
+            ->where('team_id', auth()->user()->current_team_id)
+            ->delete();
+        return redirect()->route('compositions.show-all');
     }
 }

@@ -33,7 +33,8 @@ const props = defineProps({
 })
 
 const classes = $computed(() => {
-  const baseClasses = 'inline-flex items-center space-x-1 text-sky-800 hover:text-gray-800'
+  const baseClasses =
+    'inline-flex items-center space-x-1 text-sky-800 hover:text-gray-800 cursor-pointer'
   if (props.underline) {
     return `${baseClasses} border-b border-dashed border-sky-600 hover:border-gray-600`
   }

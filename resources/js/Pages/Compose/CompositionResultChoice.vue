@@ -1,7 +1,8 @@
 <template>
   <div
     ref="containerRef"
-    class="group mx-auto rounded bg-white p-4 shadow-sm hover:bg-gray-50 lg:max-w-4xl"
+    class="group m-2 rounded bg-white p-4 shadow-sm ring-1 ring-transparent transition duration-150 ease-in-out lg:max-w-4xl"
+    :class="{ 'ring-green-500/20': highlightChoice }"
   >
     <div class="flex flex-col items-start">
       <p class="mt-1 text-base leading-8 text-slate-700">
@@ -63,6 +64,7 @@ import ConfirmationModal from '@/Components/ConfirmationModal.vue'
 import DangerButton from '@/Components/DangerButton.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import { useIsMouseInside } from '@/compositions/useIsMouseInside'
+import { useForm } from '@inertiajs/inertia-vue3'
 
 const { copy, isSupported: isClipboardSupported } = useClipboard()
 
@@ -80,10 +82,15 @@ function copyToClipboard() {
   copy(props.choice.text)
 }
 
+let highlightChoice = $ref(false)
 let text = $ref(props.choice.text)
 
 function resultChoiceUpdatedHandler(choice: CompositionResultChoice) {
   text = choice.text
+  highlightChoice = true
+  setTimeout(() => {
+    highlightChoice = false
+  }, 1000)
 }
 
 let showingResultTextEditDialog = $ref(false)
@@ -95,14 +102,19 @@ function edit() {
 
 let isDeleting = $ref(false)
 let confirmingDeletion = $ref(false)
+const deleteForm = useForm({})
 
 async function deleteResult() {
   try {
     isDeleting = true
-    await axios.delete(route('composition-result-choice.destroy', props.choice.id))
+    deleteForm.delete(route('compositions.results.choices.destroy', props.choice.id), {
+      preserveScroll: true,
+      preserveState: true,
+    })
     confirmingDeletion = false
-    await nextTick()
-    emit('deleted', props.choice.id)
+    await nextTick(() => {
+      emit('deleted', props.choice.id)
+    })
   } catch (error) {
     console.error(error)
     // todo: show error

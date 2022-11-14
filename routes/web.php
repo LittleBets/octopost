@@ -20,16 +20,17 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::name('composition.')->prefix('/composition')->group(function () {
-        Route::get('/', [CompositionController::class, 'showAll'])->name('showAll');
-        Route::get('/{composition_id}', [CompositionController::class, 'showOne'])->name('showOne');
+    Route::name('compositions.')->prefix('/composition')->group(function () {
+        Route::get('/', [CompositionController::class, 'showAll'])->name('show-all');
+        Route::get('/{composition_id}', [CompositionController::class, 'showOne'])->name('show-one');
         Route::post('/', [CompositionController::class, 'store'])->name('store');
         Route::patch('/{composition_id}', [CompositionController::class, 'update'])->name('update');
+        Route::delete('/{composition_id}', [CompositionController::class, 'destroy'])->name('destroy');
     });
     Route::name('compose.')->prefix('/compose')->group(function () {
         Route::get('/', [CompositionController::class, 'compose'])->name('new');
     });
-    Route::name('composition-result-choice.')->prefix('/composition-result-choice')->group(function () {
+    Route::name('compositions.results.choices.')->prefix('/composition-result-choice')->group(function () {
         Route::patch('/{composition_result_choice_id}', [CompositionResultChoiceController::class, 'update'])->name('update');
         Route::delete('/{composition_result_choice_id}', [CompositionResultChoiceController::class, 'destroy'])->name('destroy');
     });
