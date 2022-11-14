@@ -1,44 +1,33 @@
 <template>
-  <ComposerShell :root-composition-id="rootCompositionId" :composition-label="compositionLabel">
-    <form class="flex h-full flex-col overflow-y-auto" @submit.prevent="submit">
-      <div class="flex h-full flex-1 flex-col space-y-6 overflow-y-auto bg-white py-6 px-4 sm:p-6">
-        <slot name="header" />
-        <TextInput ref="productNameRef" v-model="payloadForm.name" label="Product Name" required />
-        <Textarea
-          v-model="payloadForm.features"
-          label="Product Features"
-          name="product_features"
-          :rows="8"
-          required
-        />
-        <ToneSelector v-model="payloadForm.tone" />
-        <AudienceSelector
-          v-model="payloadForm.audience"
-          v-model:checked="audienceSelectorChecked"
-        />
-        <LengthSelector v-model="payloadForm.composition_length" />
-        <TextInput
-          v-model.number="payloadForm.variations"
-          label="Number of Variations"
-          :max="5"
-          :min="1"
-          required
-          type="number"
-        />
-      </div>
-      <div
-        class="flex items-center justify-between space-x-4 bg-gray-50 px-4 py-3 text-right sm:px-6"
-      >
-        <CompositionCostCounter :template="template" :payload="payloadForm" />
-
-        <div class="inline-flex items-center gap-8 text-right">
-          <LinkButton class="text-sm" label="Start Over" @click="startNewHandler" />
-          <PrimaryButton :disabled="!canSubmit"
-            >{{ rootCompositionId == null ? 'Compose' : 'Recompose' }}
-          </PrimaryButton>
-        </div>
-      </div>
-    </form>
+  <ComposerShell
+    :root-composition-id="rootCompositionId"
+    :composition-label="compositionLabel"
+    :can-submit="canSubmit"
+    :payload="payloadForm"
+    :template-type="CompositionTemplateType.AmazonProductListing"
+    @submit="submit"
+    @start-over="startNewHandler"
+  >
+    <slot name="header" />
+    <TextInput ref="productNameRef" v-model="payloadForm.name" label="Product Name" required />
+    <Textarea
+      v-model="payloadForm.features"
+      label="Product Features"
+      name="product_features"
+      :rows="8"
+      required
+    />
+    <ToneSelector v-model="payloadForm.tone" />
+    <AudienceSelector v-model="payloadForm.audience" v-model:checked="audienceSelectorChecked" />
+    <LengthSelector v-model="payloadForm.composition_length" />
+    <TextInput
+      v-model.number="payloadForm.variations"
+      label="Number of Variations"
+      :max="5"
+      :min="1"
+      required
+      type="number"
+    />
     <template v-if="compositionResult" #result>
       <CompositionResult :result="compositionResult" :version="compositionVersion">
         <template #footer>
@@ -57,21 +46,19 @@
 
 <script lang="ts" setup>
 import { $computed } from 'vue/macros'
-import { nextTick } from 'vue'
+import { nextTick, reactive } from 'vue'
 import TextInput from '@/Components/TextInput.vue'
-import CompositionCostCounter from '@/Components/CompositionCostCounter.vue'
 import ToneSelector from '@/Pages/Compose/ToneSelector.vue'
 import Textarea from '@/Components/Textarea.vue'
 import AudienceSelector from '@/Pages/Compose/AudienceSelector.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
 import LengthSelector from '@/Pages/Compose/LengthSelector.vue'
 import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
-import LinkButton from '@/Components/LinkButton.vue'
 import ResultFooter from '@/Pages/Compose/ResultFooter.vue'
 import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
 import { tones } from '@/Pages/Compose/templates'
-import { useForm, usePage } from '@inertiajs/inertia-vue3'
+import { usePage } from '@inertiajs/inertia-vue3'
+import { CompositionTemplateType } from '@/enums'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 
@@ -84,7 +71,7 @@ let rootCompositionId = $ref<string | undefined>(undefined)
 let compositionVersion = $ref<number | undefined>(undefined)
 const model = $computed(() => pageProps.value.model)
 
-const payloadForm = useForm<Fields>({
+const payloadForm = reactive<Fields>({
   name: initial?.payload?.name ?? '',
   tone: initial?.payload?.tone ?? tones[0].id,
   features: initial?.payload?.features ?? '',
@@ -106,15 +93,12 @@ const canSubmit = $computed(() => {
 async function submit() {
   processing = true
   try {
-    payloadForm.transform((data) => {
-      return {
-        ...data,
-        audience: audienceSelectorChecked ? data.audience : undefined,
-      }
-    })
     const { data } = await axios.post(route('compositions.store'), {
       template,
-      payload: payloadForm.data(),
+      payload: {
+        ...payloadForm,
+        audience: audienceSelectorChecked ? payloadForm.audience : undefined,
+      },
       root_composition_id: rootCompositionId,
       model,
     })
@@ -140,7 +124,12 @@ function startNewHandler() {
 }
 
 function resetPayloadForm() {
-  payloadForm.reset()
+  payloadForm.name = ''
+  payloadForm.tone = tones[0].id
+  payloadForm.features = ''
+  payloadForm.variations = 1
+  payloadForm.audience = undefined
+  payloadForm.composition_length = 'short'
   audienceSelectorChecked = false
 }
 

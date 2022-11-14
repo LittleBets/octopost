@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="containerRef"
+    ref="shortcutActiveContainer"
     class="group m-2 rounded bg-white p-4 shadow-sm ring-1 ring-transparent transition duration-150 ease-in-out lg:max-w-4xl"
     :class="{ 'ring-green-500/20': highlightChoice }"
   >
@@ -123,8 +123,8 @@ async function deleteResult() {
   }
 }
 
-const containerRef = ref<HTMLElement | null>(null)
-const { isInside } = useIsMouseInside(containerRef)
+const shortcutActiveContainer = ref<HTMLElement | null>(null)
+const { isInside } = useIsMouseInside(shortcutActiveContainer)
 
 const { c, d, e } = useMagicKeys()
 

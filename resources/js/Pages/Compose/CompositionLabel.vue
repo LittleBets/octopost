@@ -1,5 +1,5 @@
 <template>
-  <div ref="containerRef" class="ml-10 pb-4 text-xl font-medium text-gray-500">
+  <div ref="shortcutActiveContainer" class="ml-10 pb-4 text-xl font-medium text-gray-500">
     <slot name="label">
       <div v-if="label" class="flex items-center gap-4">
         {{ label }}
@@ -43,8 +43,8 @@ watch(
   }
 )
 
-const containerRef = ref<HTMLElement | null>(null)
-const { isInside } = useIsMouseInside(containerRef)
+const shortcutActiveContainer = ref<HTMLElement | null>(null)
+const { isInside } = useIsMouseInside(shortcutActiveContainer)
 const { e } = useMagicKeys()
 whenever(and(e, isInside), () => {
   showingLabelDialog = true

@@ -1,47 +1,39 @@
 <template>
-  <ComposerShell :root-composition-id="rootCompositionId" :composition-label="compositionLabel">
-    <form class="flex h-full flex-col overflow-y-auto" @submit.prevent="submit">
-      <div class="flex flex-1 flex-col space-y-6 overflow-y-auto bg-white py-6 px-4 sm:p-6">
-        <slot name="header" />
-        <Textarea
-          ref="promptRef"
-          v-model="payloadForm.input_prompt"
-          label="Prompt"
-          name="prompt"
-          :rows="20"
-          placeholder="e.g. In a friendly and witty tone, write a blog post convincing old ladies to get a cat as their best friend.
+  <ComposerShell
+    :root-composition-id="rootCompositionId"
+    :composition-label="compositionLabel"
+    :can-submit="canSubmit"
+    :payload="payloadForm"
+    :template-type="CompositionTemplateType.Freeform"
+    @submit="submit"
+    @start-over="startNewHandler"
+  >
+    <slot name="header" />
+    <Textarea
+      ref="promptRef"
+      v-model="payloadForm.input_prompt"
+      label="Prompt"
+      name="prompt"
+      :rows="20"
+      placeholder="e.g. In a friendly and witty tone, write a blog post convincing old ladies to get a cat as their best friend.
 Include keywords cute, cuddly, fury, kittens"
-          required
-        />
-        <TextInput
-          v-model.number="payloadForm.composition_length"
-          label="Max Number of Tokens"
-          :min="20"
-          required
-          type="number"
-        />
-        <TextInput
-          v-model.number="payloadForm.variations"
-          label="Number of Variations"
-          :max="5"
-          :min="1"
-          required
-          type="number"
-        />
-      </div>
-      <div
-        class="flex items-center justify-between space-x-4 bg-gray-50 px-4 py-3 text-right sm:px-6"
-      >
-        <CompositionCostCounter :template="template" :payload="payloadForm" />
-
-        <div class="inline-flex items-center gap-8 text-right">
-          <LinkButton class="text-sm" label="Start Over" @click="startNewHandler" />
-          <PrimaryButton :disabled="!canSubmit"
-            >{{ rootCompositionId == null ? 'Compose' : 'Recompose' }}
-          </PrimaryButton>
-        </div>
-      </div>
-    </form>
+      required
+    />
+    <TextInput
+      v-model.number="payloadForm.composition_length"
+      label="Max Number of Tokens"
+      :min="20"
+      required
+      type="number"
+    />
+    <TextInput
+      v-model.number="payloadForm.variations"
+      label="Number of Variations"
+      :max="5"
+      :min="1"
+      required
+      type="number"
+    />
     <template v-if="compositionResult" #result>
       <CompositionResult :result="compositionResult" :version="compositionVersion">
         <template #footer>
@@ -60,17 +52,15 @@ Include keywords cute, cuddly, fury, kittens"
 
 <script lang="ts" setup>
 import { $computed } from 'vue/macros'
-import { nextTick } from 'vue'
+import { nextTick, reactive } from 'vue'
 import TextInput from '@/Components/TextInput.vue'
-import CompositionCostCounter from '@/Components/CompositionCostCounter.vue'
 import Textarea from '@/Components/Textarea.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
 import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
-import LinkButton from '@/Components/LinkButton.vue'
 import ResultFooter from '@/Pages/Compose/ResultFooter.vue'
 import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
-import { useForm, usePage } from '@inertiajs/inertia-vue3'
+import { usePage } from '@inertiajs/inertia-vue3'
+import { CompositionTemplateType } from '@/enums'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 
@@ -83,7 +73,7 @@ let rootCompositionId = $ref<string | undefined>(undefined)
 let compositionVersion = $ref<number | undefined>(undefined)
 const model = $computed(() => pageProps.value.model)
 
-const payloadForm = useForm<Fields>({
+const payloadForm = reactive<Fields>({
   variations: initial?.payload?.variations ?? 1,
   composition_length: initial?.payload?.composition_length ?? 500,
   input_prompt: initial?.payload?.input_prompt ?? '',
@@ -129,7 +119,9 @@ function startNewHandler() {
 }
 
 function resetPayloadForm() {
-  payloadForm.reset()
+  payloadForm.variations = 1
+  payloadForm.composition_length = 500
+  payloadForm.input_prompt = ''
 }
 
 function resetResult() {
@@ -141,6 +133,7 @@ function resetResult() {
 let compositionLabel = $ref<string | undefined>()
 
 const promptRef = $ref<HTMLElement>()
+
 function setFocus() {
   nextTick(() => {
     promptRef?.focus()

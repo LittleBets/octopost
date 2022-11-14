@@ -1,46 +1,38 @@
 <template>
-  <ComposerShell :root-composition-id="rootCompositionId" :composition-label="compositionLabel">
-    <form class="flex h-full flex-col overflow-y-auto" @submit.prevent="submit">
-      <div class="flex h-full flex-1 flex-col space-y-6 overflow-y-auto bg-white py-6 px-4 sm:p-6">
-        <slot name="header" />
-        <ResponseTypeSelector v-model="payloadForm.response_type" />
-        <Textarea
-          ref="messageRef"
-          v-model="payloadForm.message"
-          label="Message to Reply"
-          name="message"
-          :rows="12"
-          required
-        />
-        <ToneSelector v-model="payloadForm.tone" />
-        <AudienceSelector
-          v-model="payloadForm.audience"
-          v-model:checked="audienceSelectorChecked"
-          title="Address this response to"
-        />
-        <LengthSelector v-model="payloadForm.composition_length" />
-        <TextInput
-          v-model.number="payloadForm.variations"
-          label="Number of Variations"
-          :max="5"
-          :min="1"
-          required
-          type="number"
-        />
-      </div>
-      <div
-        class="flex items-center justify-between space-x-4 bg-gray-50 px-4 py-3 text-right sm:px-6"
-      >
-        <CompositionCostCounter :template="template" :payload="payloadForm" />
-
-        <div class="inline-flex items-center gap-8 text-right">
-          <LinkButton class="text-sm" label="Start Over" @click="startNewHandler" />
-          <PrimaryButton :disabled="!canSubmit"
-            >{{ rootCompositionId == null ? 'Compose' : 'Recompose' }}
-          </PrimaryButton>
-        </div>
-      </div>
-    </form>
+  <ComposerShell
+    :root-composition-id="rootCompositionId"
+    :composition-label="compositionLabel"
+    :can-submit="canSubmit"
+    :payload="payloadForm"
+    :template-type="CompositionTemplateType.Response"
+    @submit="submit"
+    @start-over="startNewHandler"
+  >
+    <slot name="header" />
+    <ResponseTypeSelector v-model="payloadForm.response_type" />
+    <Textarea
+      ref="messageRef"
+      v-model="payloadForm.message"
+      label="Message to Reply"
+      name="message"
+      :rows="12"
+      required
+    />
+    <ToneSelector v-model="payloadForm.tone" />
+    <AudienceSelector
+      v-model="payloadForm.audience"
+      v-model:checked="audienceSelectorChecked"
+      title="Address this response to"
+    />
+    <LengthSelector v-model="payloadForm.composition_length" />
+    <TextInput
+      v-model.number="payloadForm.variations"
+      label="Number of Variations"
+      :max="5"
+      :min="1"
+      required
+      type="number"
+    />
     <template v-if="compositionResult" #result>
       <CompositionResult :result="compositionResult" :version="compositionVersion">
         <template #footer>
@@ -59,22 +51,20 @@
 
 <script lang="ts" setup>
 import { $computed } from 'vue/macros'
-import { nextTick } from 'vue'
+import { nextTick, reactive } from 'vue'
 import TextInput from '@/Components/TextInput.vue'
-import CompositionCostCounter from '@/Components/CompositionCostCounter.vue'
 import ToneSelector from '@/Pages/Compose/ToneSelector.vue'
 import Textarea from '@/Components/Textarea.vue'
 import AudienceSelector from '@/Pages/Compose/AudienceSelector.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
 import LengthSelector from '@/Pages/Compose/LengthSelector.vue'
 import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
-import LinkButton from '@/Components/LinkButton.vue'
 import ResultFooter from '@/Pages/Compose/ResultFooter.vue'
 import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
-import { tones, responseTypes } from '@/Pages/Compose/templates'
-import { useForm, usePage } from '@inertiajs/inertia-vue3'
+import { responseTypes, tones } from '@/Pages/Compose/templates'
+import { usePage } from '@inertiajs/inertia-vue3'
 import ResponseTypeSelector from '@/Pages/Compose/ResponseTypeSelector.vue'
+import { CompositionTemplateType } from '@/enums'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 
@@ -87,19 +77,15 @@ let rootCompositionId = $ref<string | undefined>(undefined)
 let compositionVersion = $ref<number | undefined>(undefined)
 const model = $computed(() => pageProps.value.model)
 
-const payloadForm = useForm<Fields>({
+const payloadForm = reactive<Fields>({
   tone: initial?.payload?.tone ?? tones[0].id,
-  response_type: initial?.payload?.response_type ?? responseTypes[0].key,
+  response_type: initial?.payload?.response_type ?? responseTypes[0].id,
   message: initial?.payload?.message ?? '',
   variations: initial?.payload?.variations ?? 1,
   audience: initial?.payload?.audience ?? undefined,
   composition_length: initial?.payload?.composition_length ?? 'short',
 })
 let audienceSelectorChecked = $ref(false)
-
-const replyToInputTitle = $computed(() => {
-  return
-})
 
 const isValid = $computed<boolean>(() => {
   return payloadForm.message.trim() !== ''
@@ -113,15 +99,12 @@ const canSubmit = $computed(() => {
 async function submit() {
   processing = true
   try {
-    payloadForm.transform((data) => {
-      return {
-        ...data,
-        audience: audienceSelectorChecked ? data.audience : undefined,
-      }
-    })
     const { data } = await axios.post(route('compositions.store'), {
       template,
-      payload: payloadForm,
+      payload: {
+        ...payloadForm,
+        audience: audienceSelectorChecked ? payloadForm.audience : undefined,
+      },
       root_composition_id: rootCompositionId,
       model,
     })
@@ -147,7 +130,12 @@ function startNewHandler() {
 }
 
 function resetPayloadForm() {
-  payloadForm.reset()
+  payloadForm.tone = tones[0].id
+  payloadForm.response_type = responseTypes[0].id
+  payloadForm.message = ''
+  payloadForm.variations = 1
+  payloadForm.audience = undefined
+  payloadForm.composition_length = 'short'
   audienceSelectorChecked = false
 }
 
@@ -160,6 +148,7 @@ function resetResult() {
 let compositionLabel = $ref<string | undefined>()
 
 const messageRef = $ref<HTMLElement>()
+
 function setFocus() {
   nextTick(() => {
     messageRef?.focus()
@@ -178,7 +167,6 @@ interface Fields {
   message: string
   variations: number
   audience?: string
-  model?: string
   composition_length: string
 }
 </script>
