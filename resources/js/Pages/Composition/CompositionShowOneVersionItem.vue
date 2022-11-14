@@ -9,10 +9,10 @@
       </div>
       <div class="-mt-3 min-w-0 flex-1 p-2">
         <div
-          class="mt-1 cursor-pointer rounded p-2"
+          class="mt-1 cursor-pointer rounded border p-2"
           :class="{
-            'border border-transparent hover:border-sky-100 hover:bg-sky-50': !active,
-            'border border-sky-200 bg-sky-50': active,
+            'border-transparent hover:border-sky-100 hover:bg-sky-50': !active,
+            'border-sky-200 bg-sky-50': active,
           }"
         >
           <p class="mt-0.5 text-sm text-gray-500">

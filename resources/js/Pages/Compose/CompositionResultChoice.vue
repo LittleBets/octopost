@@ -5,7 +5,7 @@
     :class="{ 'ring-green-500/20': highlightChoice }"
   >
     <div class="flex flex-col items-start">
-      <p class="mt-1 text-base leading-8 text-slate-700">
+      <p class="mt-1 text-sm leading-7 text-gray-900">
         {{ text }}
       </p>
       <div

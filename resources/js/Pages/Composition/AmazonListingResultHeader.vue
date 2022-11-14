@@ -1,14 +1,12 @@
 <template>
-  <div class="rounded p-4 shadow">
-    <h3 class="text-sm text-gray-500">Product Features</h3>
-    <p class="pt-2 font-medium leading-8">
-      {{ composition.payload.features }}
-    </p>
-  </div>
+  <ResultHeader title="Product Features">
+    {{ composition.payload.features }}
+  </ResultHeader>
 </template>
 
 <script setup lang="ts">
 import { PropType } from 'vue'
+import ResultHeader from '@/Pages/Composition/ResultHeader.vue'
 
 defineProps({
   composition: {

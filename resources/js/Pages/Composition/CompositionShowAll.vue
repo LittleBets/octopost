@@ -1,14 +1,15 @@
 <template>
   <AppLayout title="All Compositions">
     <div class="h-full w-full overflow-y-auto py-12">
-      <div v-if="compositions.length" class="mx-auto my-auto max-w-7xl sm:px-6 lg:px-8">
-        <div class="overflow-hidden bg-white shadow sm:rounded-md">
-          <ul role="list" class="divide-y divide-gray-200">
-            <li v-for="composition in compositions" :key="composition.id">
-              <CompositionItem :composition="composition" />
-            </li>
-          </ul>
-        </div>
+      <div v-if="compositions.length" class="mx-auto my-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <ul
+          role="list"
+          class="divide-y divide-gray-200 overflow-hidden bg-white shadow sm:rounded-md"
+        >
+          <li v-for="composition in compositions" :key="composition.id">
+            <CompositionItem :composition="composition" />
+          </li>
+        </ul>
       </div>
       <div v-else class="mx-auto my-auto flex h-full w-full max-w-2xl px-6">
         <Link

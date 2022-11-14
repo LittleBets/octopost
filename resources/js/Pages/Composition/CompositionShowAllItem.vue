@@ -1,6 +1,9 @@
 <template>
-  <a :href="route('compositions.show-one', composition.id)" class="block hover:bg-gray-50">
-    <div class="px-4 py-4 sm:px-6">
+  <a
+    :href="route('compositions.show-one', composition.id)"
+    class="block rounded hover:bg-sky-50 hover:ring-sky-100"
+  >
+    <div class="p-4 sm:px-6">
       <div class="flex items-center justify-between">
         <p class="truncate font-medium text-gray-800">{{ composition.label }}</p>
         <div class="ml-2 flex flex-shrink-0">
