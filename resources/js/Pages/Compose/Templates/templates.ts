@@ -1,15 +1,17 @@
+import { CompositionTemplateType } from '@/enums'
+
 const templates: TemplateType[] = [
   {
-    id: 'response',
-    title: 'Response',
-  },
-  {
-    id: 'amazon-product-listing',
+    id: CompositionTemplateType.AmazonProductListing,
     title: 'Amazon Product Listing',
   },
   {
-    id: 'freeform',
+    id: CompositionTemplateType.Freeform,
     title: 'Freeform',
+  },
+  {
+    id: CompositionTemplateType.Response,
+    title: 'Response',
   },
 ]
 

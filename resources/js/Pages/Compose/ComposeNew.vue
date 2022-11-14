@@ -28,7 +28,7 @@ const ResponseTemplate = defineAsyncComponent(
 )
 
 const template: CompositionTemplateType = $ref<CompositionTemplateType>(
-  CompositionTemplateType.AmazonProductListing
+  CompositionTemplateType.Response
 )
 
 const templateComposer = computed(() => {
