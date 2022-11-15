@@ -18,11 +18,16 @@
       :rows="12"
       required
     />
-    <ToneSelector v-model="payloadForm.tone" />
+    <ToneSelector
+      v-model:checked="toneSelectorChecked"
+      :model-value="baseComposition?.payload?.tone ?? tones[0].id"
+      @update:model-value="(val) => (payloadForm.tone = val)"
+    />
     <AudienceSelector
-      v-model="payloadForm.audience"
       v-model:checked="audienceSelectorChecked"
       title="Address this response to"
+      :model-value="baseComposition?.payload?.audience ?? audiences[0].id"
+      @update:model-value="(val) => (payloadForm.audience = val)"
     />
     <LengthSelector v-model="payloadForm.composition_length" />
     <TextInput
@@ -61,7 +66,7 @@ import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
 import ResultFooter from '@/Pages/Compose/ResultFooter.vue'
 import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
-import { responseTypes, tones } from '@/Pages/Compose/templates'
+import { responseTypes, tones, audiences } from '@/Pages/Compose/templates'
 import { usePage } from '@inertiajs/inertia-vue3'
 import ResponseTypeSelector from '@/Pages/Compose/ResponseTypeSelector.vue'
 import { CompositionTemplateType } from '@/enums'
@@ -88,10 +93,11 @@ const payloadForm = reactive<Fields>({
   response_type: props.baseComposition?.payload?.response_type ?? responseTypes[0].id,
   message: props.baseComposition?.payload?.message ?? '',
   variations: props.baseComposition?.payload?.variations ?? 1,
-  audience: props.baseComposition?.payload?.audience ?? undefined,
+  audience: props.baseComposition?.payload?.audience ?? audiences[0].id,
   composition_length: String(props.baseComposition?.payload?.composition_length) ?? 'short',
 })
 let audienceSelectorChecked = $ref(false)
+let toneSelectorChecked = $ref(false)
 
 const isValid = $computed<boolean>(() => {
   return payloadForm.message.trim() !== ''
@@ -110,6 +116,7 @@ async function submit() {
       payload: {
         ...payloadForm,
         audience: audienceSelectorChecked ? payloadForm.audience : undefined,
+        tone: toneSelectorChecked ? payloadForm.tone : undefined,
       },
       root_composition_id: rootCompositionId,
       model,
@@ -143,6 +150,7 @@ function resetPayloadForm() {
   payloadForm.audience = undefined
   payloadForm.composition_length = 'short'
   audienceSelectorChecked = false
+  toneSelectorChecked = false
 }
 
 function resetResult() {

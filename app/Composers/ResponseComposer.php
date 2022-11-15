@@ -16,10 +16,11 @@ class ResponseComposer extends BaseComposer
 
         $audience = $payload['audience'] ?? null;
         $addressingLiteral = $audience ? " for {$payload['audience']}" : '';
+        $tone = $payload['tone'] ?? '';
 
         return CompositionPrompt::from([
             'model' => $payload['model'] ?? 'text-davinci-002',
-            'prompt' => sprintf("Write a %s reply %s in response to %s:\n\n%s:\n%s", $payload['tone'], $addressingLiteral, $payload['response_type'], $payload['response_type'], trim($payload['message'])),
+            'prompt' => sprintf("Write a %s reply %s in response to %s:\n\n%s:\n%s", $tone, $addressingLiteral, $payload['response_type'], $payload['response_type'], trim($payload['message'])),
             'max_tokens' => $maxTokens,
             'temperature' => 0.9,
             'n' => $payload['variations'],

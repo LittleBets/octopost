@@ -1,8 +1,8 @@
 <template>
-  <ListItemSelector
+  <ComboItemSelector
     v-model="selected"
     v-model:checked="checkState"
-    :options="audiences"
+    :options="availableAudiences"
     :title="title"
     with-checkbox
   />
@@ -10,10 +10,11 @@
 
 <script lang="ts" setup>
 import { audiences } from '@/Pages/Compose/templates'
-import ListItemSelector from '@/Pages/Compose/ListItemSelector.vue'
+import ComboItemSelector from '@/Pages/Compose/ComboItemSelector.vue'
 
 const { title = 'Target Audience', modelValue = null, checked = false } = defineProps<Props>()
 const emit = defineEmits(['update:modelValue', 'update:checked'])
+const availableAudiences = $computed(() => [...audiences, { id: modelValue, title: modelValue }])
 
 const selected = $computed({
   get() {

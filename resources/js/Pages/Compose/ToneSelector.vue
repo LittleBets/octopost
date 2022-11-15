@@ -1,19 +1,27 @@
 <template>
-  <ListItemSelector v-model="selected" :options="tones" :title="title" />
+  <ComboItemSelector
+    v-model="selected"
+    v-model:checked="checkState"
+    :options="availableTones"
+    :title="title"
+    with-checkbox
+  />
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { tones } from '@/Pages/Compose/templates'
-import ListItemSelector from '@/Pages/Compose/ListItemSelector.vue'
+import ComboItemSelector from '@/Pages/Compose/ComboItemSelector.vue'
 
-interface Props {
-  title?: string
-  modelValue?: string
-}
-
-const { title = 'Tone', modelValue = null } = defineProps<Props>()
-const emit = defineEmits(['update:modelValue'])
+const { title = 'Tone', modelValue = null, checked = false } = defineProps<Props>()
+const emit = defineEmits(['update:modelValue', 'update:checked'])
+const availableTones = $computed(() => [...tones, { id: modelValue, title: modelValue }])
+const checkState = $computed({
+  get: () => checked,
+  set: (val) => {
+    emit('update:checked', val)
+  },
+})
 
 const selected = computed({
   get() {
@@ -23,4 +31,10 @@ const selected = computed({
     emit('update:modelValue', val)
   },
 })
+
+interface Props {
+  title?: string
+  modelValue?: string
+  checked?: boolean
+}
 </script>

@@ -38,15 +38,15 @@ const tones = [
 ]
 
 const audiences = [
+  { id: 'friends', title: 'Friends' },
+  { id: 'clients', title: 'Clients' },
+  { id: 'boss', title: 'Boss' },
   { id: 'parents', title: 'Parents' },
   { id: 'women', title: 'Women' },
   { id: 'men', title: 'Men' },
   { id: 'kids', title: 'Kids' },
   { id: 'teenagers', title: 'Teenagers' },
   { id: 'adults', title: 'Adults' },
-  { id: 'clients', title: 'Clients' },
-  { id: 'friends', title: 'Friends' },
-  { id: 'boss', title: 'Boss' },
   { id: 'seniors', title: 'Seniors' },
   { id: 'adventurers', title: 'Adventurers' },
   { id: 'beauty_fans', title: 'Beauty Fans' },

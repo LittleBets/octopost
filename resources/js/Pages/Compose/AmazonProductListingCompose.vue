@@ -17,8 +17,16 @@
       :rows="8"
       required
     />
-    <ToneSelector v-model="payloadForm.tone" />
-    <AudienceSelector v-model="payloadForm.audience" v-model:checked="audienceSelectorChecked" />
+    <ToneSelector
+      v-model:checked="toneSelectorChecked"
+      :model-value="baseComposition?.payload?.tone ?? tones[0].id"
+      @update:model-value="(val) => (payloadForm.tone = val)"
+    />
+    <AudienceSelector
+      v-model:checked="audienceSelectorChecked"
+      :model-value="baseComposition?.payload?.audience ?? audiences[0].id"
+      @update:model-value="(val) => (payloadForm.audience = val)"
+    />
     <LengthSelector v-model="payloadForm.composition_length" />
     <TextInput
       v-model.number="payloadForm.variations"
@@ -56,7 +64,7 @@ import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
 import ResultFooter from '@/Pages/Compose/ResultFooter.vue'
 import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
-import { tones } from '@/Pages/Compose/templates'
+import { tones, audiences } from '@/Pages/Compose/templates'
 import { usePage } from '@inertiajs/inertia-vue3'
 import { CompositionTemplateType } from '@/enums'
 
@@ -86,6 +94,7 @@ const payloadForm = reactive<Fields>({
   composition_length: String(props.baseComposition?.payload?.composition_length) ?? 'short',
 })
 let audienceSelectorChecked = $ref(false)
+let toneSelectorChecked = $ref(false)
 
 const isValid = $computed<boolean>(() => {
   return payloadForm.name.trim() !== '' && payloadForm.features.trim() !== ''
@@ -104,6 +113,7 @@ async function submit() {
       payload: {
         ...payloadForm,
         audience: audienceSelectorChecked ? payloadForm.audience : undefined,
+        tone: toneSelectorChecked ? payloadForm.tone : undefined,
       },
       root_composition_id: rootCompositionId,
       model,
@@ -137,6 +147,7 @@ function resetPayloadForm() {
   payloadForm.audience = undefined
   payloadForm.composition_length = 'short'
   audienceSelectorChecked = false
+  toneSelectorChecked = false
 }
 
 function resetResult() {
