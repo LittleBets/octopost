@@ -7,31 +7,64 @@
           class="flex h-2 w-2 items-center justify-center rounded-full border-2 border-gray-300 bg-white font-medium text-white"
         />
       </div>
-      <div class="-mt-3 min-w-0 flex-1 p-2">
+      <div ref="shortcutActiveContainer" class="group -mt-3 min-w-0 flex-1 p-2">
         <div
           class="mt-1 cursor-pointer rounded border p-2"
           :class="{
-            'border-transparent hover:border-sky-100 hover:bg-sky-50': !active,
+            'border-transparent hover:border-gray-200 hover:bg-gray-100': !active,
             'border-sky-200 bg-sky-50': active,
           }"
         >
           <p class="mt-0.5 text-sm text-gray-500">
             {{ composition.created_at_short }}
           </p>
-          <div class="mt-2 text-sm text-gray-700">
+          <div class="mt-2 flex flex-col gap-2 text-sm text-gray-700">
             <Component :is="versionInfoComponent" :composition="composition" />
+          </div>
+          <div class="flex justify-end opacity-10 group-hover:opacity-100">
+            <LinkButton
+              v-tippy="'Delete Version &nbsp;&nbsp;&nbsp;D'"
+              @click="confirmingDeletion = true"
+            >
+              <icon icon="ph:trash" class="h-5 w-auto text-gray-500 hover:text-red-500" />
+            </LinkButton>
           </div>
         </div>
       </div>
     </div>
+    <ConfirmationModal :show="confirmingDeletion" @close="confirmingDeletion = false">
+      <template #title> Delete Version </template>
+      <template #content>
+        <div class="font-semibold">
+          Are you sure you want to delete this version and all its results?
+        </div>
+        <div class="my-4 rounded bg-gray-100 py-2 px-4 shadow-inner">
+          <Component :is="versionInfoComponent" :composition="composition" />
+        </div>
+      </template>
+      <template #footer>
+        <SecondaryButton @click="confirmingDeletion = false"> Cancel </SecondaryButton>
+        <DangerButton class="ml-3" :disabled="deleteForm.processing" @click="deleteResult">
+          Yes, Delete
+        </DangerButton>
+      </template>
+    </ConfirmationModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, PropType } from 'vue'
+import { defineAsyncComponent, nextTick, PropType, ref } from 'vue'
 import { type Component } from 'vue'
 import { CompositionTemplateType } from '@/enums'
 import { $computed } from 'vue/macros'
+import LinkButton from '@/Components/LinkButton.vue'
+import ConfirmationModal from '@/Components/ConfirmationModal.vue'
+import { useForm } from '@inertiajs/inertia-vue3'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
+import DangerButton from '@/Components/DangerButton.vue'
+import { useIsMouseInside } from '@/compositions/useIsMouseInside'
+import { useMagicKeys, whenever } from '@vueuse/core'
+import { and } from '@vueuse/math'
 
 const props = defineProps({
   composition: { type: Object as PropType<Composition>, required: true },
@@ -61,5 +94,30 @@ const versionInfoComponent = $computed<Component>(() => {
       return FreeformVersionInfo
   }
   return null
+})
+
+let confirmingDeletion = $ref(false)
+const deleteForm = useForm({})
+
+async function deleteResult() {
+  deleteForm.delete(route('compositions.destroy', props.composition.id), {
+    preserveScroll: true,
+    preserveState: true,
+    onFinish: () => {
+      confirmingDeletion = false
+    },
+    onError: (error) => {
+      console.error(error)
+    },
+  })
+}
+
+const shortcutActiveContainer = ref<HTMLElement | null>(null)
+const { isInside } = useIsMouseInside(shortcutActiveContainer)
+
+const { d } = useMagicKeys()
+
+whenever(and(d, isInside), () => {
+  confirmingDeletion = true
 })
 </script>

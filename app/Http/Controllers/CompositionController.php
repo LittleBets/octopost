@@ -93,6 +93,11 @@ class CompositionController extends Controller
         Composition::where('id', $request->composition_id)
             ->where('team_id', auth()->user()->current_team_id)
             ->delete();
-        return redirect()->route('compositions.show-all');
+        $returnTo = $request->return_to;
+        if($returnTo !== null) {
+            return redirect()->route($returnTo);
+        } else {
+            return redirect()->back();
+        }
     }
 }

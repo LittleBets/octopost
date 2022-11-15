@@ -11,11 +11,9 @@
       <div
         class="mt-4 flex w-full items-center justify-between gap-4 opacity-25 transition duration-300 ease-in-out hover:transition-all group-hover:opacity-100"
       >
-        <div class="flex items-center">
-          <LinkButton v-tippy="'Delete &nbsp;&nbsp;&nbsp;D'" @click="confirmingDeletion = true">
-            <icon icon="ph:trash" class="h-5 w-auto group-hover:text-red-500" />
-          </LinkButton>
-        </div>
+        <LinkButton v-tippy="'Delete &nbsp;&nbsp;&nbsp;D'" @click="confirmingDeletion = true">
+          <icon icon="ph:trash" class="h-5 w-auto text-gray-500 hover:text-red-500" />
+        </LinkButton>
         <div class="flex items-center justify-end gap-4">
           <LinkButton v-tippy="'Edit &nbsp;&nbsp;&nbsp;E'" @click="edit">
             <icon icon="ph:pencil-simple" class="h-5 w-auto" />
@@ -41,13 +39,15 @@
       <template #title> Delete Result </template>
       <template #content>
         <div class="font-semibold">Are you sure you want to delete this result?</div>
-        <div class="my-4 rounded bg-gray-100 py-2 px-4 leading-relaxed">{{ choice.text }}</div>
+        <div class="my-4 rounded bg-gray-100 py-2 px-4 leading-relaxed shadow-inner">
+          {{ choice.text }}
+        </div>
       </template>
 
       <template #footer>
         <SecondaryButton @click="confirmingDeletion = false"> Cancel </SecondaryButton>
-        <DangerButton class="ml-3" :disabled="isDeleting" @click="deleteResult">
-          Delete Result
+        <DangerButton class="ml-3" :disabled="deleteForm.processing" @click="deleteResult">
+          Yes, Delete
         </DangerButton>
       </template>
     </ConfirmationModal>
@@ -100,27 +100,23 @@ function edit() {
   showingResultTextEditDialog = true
 }
 
-let isDeleting = $ref(false)
 let confirmingDeletion = $ref(false)
 const deleteForm = useForm({})
 
 async function deleteResult() {
-  try {
-    isDeleting = true
-    deleteForm.delete(route('compositions.results.choices.destroy', props.choice.id), {
-      preserveScroll: true,
-      preserveState: true,
-    })
-    confirmingDeletion = false
-    await nextTick(() => {
+  deleteForm.delete(route('compositions.results.choices.destroy', props.choice.id), {
+    preserveScroll: true,
+    preserveState: true,
+    onSuccess: () => {
       emit('deleted', props.choice.id)
-    })
-  } catch (error) {
-    console.error(error)
-    // todo: show error
-  } finally {
-    isDeleting = false
-  }
+    },
+    onError: (error) => {
+      console.log(error)
+    },
+    onFinish: () => {
+      confirmingDeletion = false
+    },
+  })
 }
 
 const shortcutActiveContainer = ref<HTMLElement | null>(null)

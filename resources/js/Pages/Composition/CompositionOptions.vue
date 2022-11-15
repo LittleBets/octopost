@@ -129,7 +129,12 @@ function confirmDelete() {
 const deleteForm = useForm({})
 
 function deletePost() {
-  deleteForm.delete(route('compositions.destroy', props.composition.id))
+  deleteForm.delete(
+    route('compositions.destroy', {
+      composition_id: props.composition.id,
+      return_to: 'compositions.show-all',
+    })
+  )
 }
 
 function closeDeleteConfirmationModal() {
