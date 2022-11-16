@@ -32,7 +32,7 @@
           </div>
         </div>
       </form>
-      <div class="flex h-full max-w-7xl flex-col overflow-y-hidden px-6">
+      <div class="flex h-full w-full flex-col overflow-y-hidden px-6">
         <slot name="result" />
         <slot name="emptyResult" />
       </div>
