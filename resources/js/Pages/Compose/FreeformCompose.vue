@@ -35,7 +35,7 @@ Include keywords cute, cuddly, fury, kittens"
       type="number"
     />
     <template v-if="compositionResult" #result>
-      <CompositionResult :result="compositionResult" :version="compositionVersion">
+      <CompositionResult :result="compositionResult" :version="compositionVersion" class="h-full">
         <template #footer>
           <ResultFooter
             :composition-version="compositionVersion"

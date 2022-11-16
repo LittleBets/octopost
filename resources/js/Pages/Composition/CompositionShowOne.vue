@@ -38,9 +38,12 @@
           </ul>
         </div>
         <div class="flex h-full max-w-7xl flex-col justify-between px-4 md:w-2/3 md:px-0">
-          <div v-if="selectedComposition" class="overflow-y-auto shadow-lg">
-            <Component :is="resultHeader" :composition="selectedComposition" />
-            <CompositionResult :result="selectedComposition.composition_result" />
+          <div v-if="selectedComposition" class="flex h-full flex-col overflow-y-hidden">
+            <Component :is="resultHeader" :composition="selectedComposition" class="bg-white" />
+            <CompositionResult
+              :result="selectedComposition.composition_result"
+              class="overflow-y-auto shadow-md"
+            />
           </div>
         </div>
       </div>
