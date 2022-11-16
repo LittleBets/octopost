@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, PropType, ref } from 'vue'
+import { PropType, ref } from 'vue'
 import LinkButton from '@/Components/LinkButton.vue'
 import ResultChoiceUpdateModal from '@/Pages/Compose/ResultChoiceUpdateModal.vue'
 import { useClipboard, useMagicKeys, whenever } from '@vueuse/core'
@@ -79,7 +79,7 @@ const emit = defineEmits<{
 let choiceToEdit = $ref<CompositionResultChoice>()
 
 function copyToClipboard() {
-  copy(props.choice.text)
+  copy(text)
 }
 
 let highlightChoice = $ref(false)

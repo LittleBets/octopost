@@ -38,8 +38,8 @@ async function save() {
   try {
     form.patch(route('compositions.results.choices.update', props.modelValue.id), {
       preserveScroll: true,
-      // preserveState: true,
-      onSuccess: (data) => {
+      preserveState: true,
+      onSuccess: () => {
         emit('update:modelValue', {
           ...props.modelValue,
           text: form.text,
