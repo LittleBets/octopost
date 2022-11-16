@@ -37,11 +37,11 @@
             </li>
           </ul>
         </div>
-        <div class="flex max-w-7xl flex-col rounded bg-white px-4 shadow-lg md:w-2/3 md:px-0">
-          <template v-if="selectedComposition">
+        <div class="flex h-full max-w-7xl flex-col justify-between px-4 md:w-2/3 md:px-0">
+          <div v-if="selectedComposition" class="overflow-y-auto shadow-lg">
             <Component :is="resultHeader" :composition="selectedComposition" />
             <CompositionResult :result="selectedComposition.composition_result" />
-          </template>
+          </div>
         </div>
       </div>
     </div>
