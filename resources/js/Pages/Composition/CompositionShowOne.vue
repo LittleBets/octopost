@@ -1,8 +1,10 @@
 <template>
   <AppLayout :title="`Composition - ${composition.label}`">
-    <div class="h-full overflow-y-auto bg-white bg-gray-50 py-12 md:overflow-y-hidden">
-      <div class="mx-auto flex max-w-7xl flex-col gap-4 sm:px-6 md:h-full md:flex-row md:px-8">
-        <div class="flex flex-col px-4 md:w-1/3 md:overflow-y-hidden md:px-0">
+    <div class="mx-auto h-full overflow-y-auto md:overflow-y-hidden">
+      <div
+        class="mx-auto flex flex-col gap-4 bg-gray-50 py-12 sm:px-6 md:h-full md:flex-row md:px-8 2xl:px-40"
+      >
+        <div class="flex max-w-xl flex-col px-4 md:w-1/3 md:overflow-y-hidden md:px-0">
           <div class="flex items-center justify-between">
             <div class="space-y-2 font-medium text-gray-800">
               <div class="text-lg">
@@ -35,10 +37,9 @@
             </li>
           </ul>
         </div>
-        <div class="flex flex-col px-4 md:w-2/3 md:px-0">
+        <div class="flex max-w-7xl flex-col rounded bg-white px-4 shadow-lg md:w-2/3 md:px-0">
           <template v-if="selectedComposition">
             <Component :is="resultHeader" :composition="selectedComposition" />
-            <h2 class="px-4 pt-6 pb-4 text-lg font-medium text-gray-900">Results</h2>
             <CompositionResult :result="selectedComposition.composition_result" />
           </template>
         </div>

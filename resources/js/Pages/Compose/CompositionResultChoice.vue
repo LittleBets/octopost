@@ -1,7 +1,7 @@
 <template>
   <div
     ref="shortcutActiveContainer"
-    class="group m-2 rounded bg-white p-4 shadow-sm ring-1 ring-transparent transition duration-150 ease-in-out lg:max-w-4xl"
+    class="group m-2 rounded bg-white p-4 shadow-sm ring-1 ring-transparent transition duration-150 ease-in-out"
     :class="{ 'ring-green-500/20': highlightChoice }"
   >
     <div class="flex flex-col items-start">

@@ -1,5 +1,5 @@
 <template>
-  <div ref="shortcutActiveContainer" class="ml-10 pb-4 text-xl font-medium text-gray-500">
+  <div ref="shortcutActiveContainer" class="mx-10 pb-4 text-xl font-medium text-gray-500">
     <slot name="label">
       <div v-if="label" class="flex items-center gap-4">
         {{ label }}

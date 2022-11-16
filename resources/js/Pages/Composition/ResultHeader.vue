@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 p-4 shadow-inner">
+  <div class="border-b bg-gray-50 p-4">
     <h3 v-if="!$slots.title && title" class="text-sm text-gray-500">
       {{ title }}
     </h3>

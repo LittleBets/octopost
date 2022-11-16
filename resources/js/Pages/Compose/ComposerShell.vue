@@ -1,7 +1,9 @@
 <template>
-  <div class="flex w-full flex-1 flex-col overflow-y-hidden">
+  <div class="mx-auto flex h-full w-full flex-col overflow-y-hidden">
     <CompositionLabel :value="compositionLabel" :composition-id="rootCompositionId" />
-    <div class="flex w-full flex-1 flex-col gap-8 overflow-y-hidden py-1 md:flex-row md:gap-0">
+    <div
+      class="mx-auto flex w-full flex-1 flex-col gap-8 overflow-y-hidden py-1 md:flex-row md:gap-0"
+    >
       <form
         ref="shortcutActiveContainer"
         class="mx-6 flex h-full max-w-2xl flex-col overflow-y-hidden bg-white shadow shadow sm:overflow-hidden sm:rounded-md sm:rounded-lg md:mx-0 md:ml-8 md:w-3/5"
@@ -30,7 +32,7 @@
           </div>
         </div>
       </form>
-      <div class="flex h-full w-full flex-col overflow-y-hidden px-6">
+      <div class="flex h-full max-w-7xl flex-col overflow-y-hidden px-6">
         <slot name="result" />
         <slot name="emptyResult" />
       </div>

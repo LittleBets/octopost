@@ -21,7 +21,7 @@
           <div class="mt-2 flex flex-col gap-2 text-sm text-gray-700">
             <Component :is="versionInfoComponent" :composition="composition" />
           </div>
-          <div class="flex justify-end opacity-10 group-hover:opacity-100">
+          <div class="flex justify-end opacity-10 group-hover:opacity-50">
             <LinkButton
               v-tippy="'Delete Version &nbsp;&nbsp;&nbsp;D'"
               @click="confirmingDeletion = true"
