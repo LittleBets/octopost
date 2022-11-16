@@ -18,9 +18,9 @@ class UsageController extends Controller
         $prompt = $compositionPrompt->prompt;
         if(strlen($prompt) === 0) {
             return response()->json([
-                'prompt_tokens' => 0,
-                'completion_tokens' => 0,
-                'total_tokens' => 0,
+                'prompt_credits' => 0,
+                'completion_credits' => 0,
+                'total_credits' => 0,
             ]);
         }
         $counterResponse = Http::post(config('app.token_counter_endpoint'), ['prompt' => $prompt,]);
@@ -28,11 +28,16 @@ class UsageController extends Controller
             $promptToken = $counterResponse['length'];
             $completionToken = $compositionPrompt->maxTokens  * $compositionPrompt->n;
             return response()->json([
-                'prompt_tokens' => $promptToken,
-                'completion_tokens' => $completionToken,
-                'total_tokens' => $promptToken + $completionToken,
+                'prompt_credits' => $this->convertTokenLengthToWordCredits($promptToken),
+                'completion_credits' => $this->convertTokenLengthToWordCredits($completionToken),
+                'total_credits' => $this->convertTokenLengthToWordCredits($promptToken + $completionToken),
             ]);
         }
         return abort(400);
+    }
+
+    private function convertTokenLengthToWordCredits(int $tokenLength): int
+    {
+        return ceil($tokenLength / 0.75);
     }
 }

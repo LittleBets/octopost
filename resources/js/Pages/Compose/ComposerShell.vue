@@ -20,7 +20,11 @@
           </div>
           <div class="flex items-center justify-between space-x-4 bg-gray-50 py-4 px-6 text-right">
             <slot name="action" />
-            <CompositionCostCounter :template="templateType" :payload="payload" />
+            <CompositionCostCounter
+              :disabled="!canSubmit"
+              :template="templateType"
+              :payload="payload"
+            />
             <div class="inline-flex items-center gap-8 text-right">
               <LinkButton
                 v-tippy="'Clear form and start a new composition &nbsp;&nbsp;&nbsp;&#8984;&#8679;'"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    A {{ composition.payload.composition_length }} tokens long
+    About {{ composition.payload.composition_length }} word long
     {{ composition.payload.response_type }} freeform prompt.
   </div>
 </template>

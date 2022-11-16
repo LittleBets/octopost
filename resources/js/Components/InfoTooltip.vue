@@ -14,5 +14,3 @@
     </template>
   </tippy>
 </template>
-
-<script setup lang="ts"></script>

@@ -16,7 +16,7 @@
           :required="required"
           :type="type"
           :value="modelValue"
-          class="block border-0 bg-transparent p-0 text-gray-900 placeholder-gray-500 focus:ring-0 w-full"
+          class="block w-full border-0 bg-transparent p-0 text-gray-900 placeholder-gray-500 focus:ring-0"
           v-bind="$attrs"
           @input="$emit('update:modelValue', $event.target.value)"
         />

@@ -9,13 +9,15 @@ class FreeformComposer extends BaseComposer
 {
     public function prompt(array $payload): CompositionPrompt
     {
-        $maxTokens = $payload['composition_length'];
+        $maxWords = $payload['composition_length'];
+
+        clock($payload);
 
         return CompositionPrompt::from([
             'model' => $payload['model'] ?? 'text-davinci-002',
             'prompt' => $payload['input_prompt'] ?? '',
-            'max_tokens' => $maxTokens,
-            'temperature' => 0.9,
+            'max_tokens' => $this->convertWordCreditsToTokensLength($maxWords),
+            'temperature' => 0.7,
             'n' => $payload['variations'],
         ]);
     }

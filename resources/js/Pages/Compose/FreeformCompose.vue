@@ -21,7 +21,7 @@ Include keywords cute, cuddly, fury, kittens"
     />
     <TextInput
       v-model.number="payloadForm.composition_length"
-      label="Max Number of Tokens"
+      label="Max Number of Words"
       :min="20"
       required
       type="number"
@@ -80,7 +80,7 @@ const model = $computed(() => pageProps.value.model)
 
 const payloadForm = reactive<Fields>({
   variations: props.baseComposition?.payload?.variations ?? 1,
-  composition_length: Number(props.baseComposition?.payload?.composition_length) ?? 500,
+  composition_length: Number(props.baseComposition?.payload?.composition_length ?? 600),
   input_prompt: props.baseComposition?.payload?.input_prompt ?? '',
 })
 
@@ -125,7 +125,7 @@ function startNewHandler() {
 
 function resetPayloadForm() {
   payloadForm.variations = 1
-  payloadForm.composition_length = 500
+  payloadForm.composition_length = 600
   payloadForm.input_prompt = ''
 }
 

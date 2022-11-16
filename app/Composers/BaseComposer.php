@@ -92,7 +92,7 @@ abstract class BaseComposer implements ComposerContract
     {
         $faker = Factory::create();
         $variations = $prompt->n;
-        $length = ceil($prompt->maxTokens/100);
+        $length = ceil($this->convertWordCreditsToTokensLength($prompt->maxTokens)/100);
         $choices = collect(range(0, $variations - 1))->map(function ($idx) use ($faker, $length) {
             return [
                 'text' => $faker->paragraphs($faker->numberBetween($length, ceil($length)), true),
@@ -107,6 +107,9 @@ abstract class BaseComposer implements ComposerContract
             'prompt_tokens' => $promptToken,
             'completion_tokens' => $completionToken,
             'total_tokens' => $promptToken + $completionToken,
+            'prompt_credits' => $this->convertTokenLengthToWordCredits($promptToken),
+            'completion_credits' => $this->convertTokenLengthToWordCredits($completionToken),
+            'total_credits' => $this->convertTokenLengthToWordCredits($promptToken + $completionToken),
         ];
         $attributes = [
             'id' => $faker->uuid(),
@@ -118,5 +121,26 @@ abstract class BaseComposer implements ComposerContract
         ];
 
         return CreateResponse::from($attributes);
+    }
+
+    protected function convertWordCreditsToTokensLength(int $wordCredits): int
+    {
+        // 100 words ~= 75 tokens
+        return ceil($wordCredits * 0.75);
+    }
+
+    protected function convertTokenLengthToWordCredits(int $tokenLength): int
+    {
+        // 75 tokens ~= 100 words
+        return ceil($tokenLength / 0.75);
+    }
+
+    protected function compositionLengthToTokens(string $length): int
+    {
+        return match ($length) {
+            'medium' => $this->convertWordCreditsToTokensLength(180),
+            'long' => $this->convertWordCreditsToTokensLength(240),
+            default => $this->convertWordCreditsToTokensLength(130)
+        };
     }
 }
