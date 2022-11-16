@@ -1,6 +1,6 @@
 <template>
-  <div v-if="choices.length" class="flex h-full flex-col gap-8 overflow-y-hidden">
-    <div class="h-full space-y-6 overflow-y-auto">
+  <div v-if="choices.length" class="flex flex-col gap-8 md:h-full md:overflow-y-hidden">
+    <div class="mt-10 space-y-6 md:mt-0 md:h-full md:overflow-y-auto">
       <article v-for="choice in choices" :key="choice.id">
         <CompositionResultChoice :choice="choice" @deleted="choiceDeletedHandler" />
       </article>

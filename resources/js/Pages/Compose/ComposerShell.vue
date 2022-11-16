@@ -1,12 +1,16 @@
 <template>
   <div class="mx-auto flex h-full w-full flex-col overflow-y-hidden">
-    <CompositionLabel :value="compositionLabel" :composition-id="rootCompositionId" />
+    <CompositionLabel
+      class="hidden md:block"
+      :value="compositionLabel"
+      :composition-id="rootCompositionId"
+    />
     <div
-      class="mx-auto flex w-full flex-1 flex-col gap-8 overflow-y-hidden py-1 md:flex-row md:gap-0"
+      class="mx-auto w-full gap-8 overflow-y-auto py-1 md:flex md:flex-1 md:flex-row md:gap-0 md:overflow-y-hidden"
     >
       <form
         ref="shortcutActiveContainer"
-        class="mx-6 flex h-full max-w-2xl flex-col overflow-y-hidden bg-white shadow shadow sm:overflow-hidden sm:rounded-md sm:rounded-lg md:mx-0 md:ml-8 md:w-3/5"
+        class="mx-6 flex max-w-2xl flex-col bg-white shadow sm:rounded-lg md:mx-0 md:ml-8 md:h-full md:w-3/5 md:overflow-y-hidden"
         :class="{ 'ring-2 ring-orange-200': model === 'fake' }"
         @submit.prevent="emit('submit')"
       >
@@ -19,20 +23,28 @@
             <CompositionCostCounter :template="templateType" :payload="payload" />
             <div class="inline-flex items-center gap-8 text-right">
               <LinkButton
-                v-tippy="'Clear form and start a new composition &nbsp;&nbsp;&nbsp;&#8984;&#8679;S'"
-                class="text-sm"
+                v-tippy="'Clear form and start a new composition &nbsp;&nbsp;&nbsp;&#8984;&#8679;'"
+                class="hidden text-sm md:inline"
                 label="Start Over"
                 @click="emit('startOver')"
               />
-              <PrimaryButton :disabled="!canSubmit"
-                >{{ rootCompositionId == null ? 'Compose' : 'Recompose' }}&nbsp; &nbsp;
-                &#8984;&#8617;
+              <LinkButton
+                v-tippy="'Clear form and start a new composition'"
+                class="inline text-sm md:hidden"
+                label="New"
+                @click="emit('startOver')"
+              />
+              <PrimaryButton :disabled="!canSubmit">
+                <span>
+                  <span>{{ rootCompositionId == null ? 'Compose' : 'Recompose' }}</span
+                  ><span class="hidden md:inline">&nbsp; &nbsp; &#8984;&#8617;</span>
+                </span>
               </PrimaryButton>
             </div>
           </div>
         </div>
       </form>
-      <div class="flex h-full w-full flex-col overflow-y-hidden px-6">
+      <div class="flex w-full flex-col px-6 md:h-full md:overflow-y-hidden">
         <slot name="result" />
         <slot name="emptyResult" />
       </div>
