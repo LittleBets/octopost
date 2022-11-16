@@ -31,6 +31,11 @@
 
             <div class="hidden sm:ml-6 sm:flex sm:items-center">
               <div class="relative ml-3">
+                <LinkButton class="mr-4 text-sm" @click="showFeedbackWindow"
+                  >Send Feedback</LinkButton
+                >
+              </div>
+              <div class="relative ml-3">
                 <!-- Teams Dropdown -->
                 <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
                   <template #trigger>
@@ -334,7 +339,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import ApplicationMark from '@/Components/ApplicationMark.vue'
@@ -343,10 +348,13 @@ import Dropdown from '@/Components/Dropdown.vue'
 import DropdownLink from '@/Components/DropdownLink.vue'
 import NavLink from '@/Components/NavLink.vue'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
+import LinkButton from '@/Components/LinkButton.vue'
+import { usePage } from '@inertiajs/inertia-vue3'
 
 defineProps({
   title: String,
 })
+const { props: pageProps } = usePage()
 
 const showingNavigationDropdown = ref(false)
 
@@ -364,5 +372,15 @@ const switchToTeam = (team) => {
 
 const logout = () => {
   Inertia.post(route('logout'))
+}
+
+const user = computed(() => pageProps.value.user)
+
+function showFeedbackWindow() {
+  window.Feedmas.open({
+    userName: user.value.name,
+    userEmail: user.value.email,
+    route: route().current(),
+  })
 }
 </script>
