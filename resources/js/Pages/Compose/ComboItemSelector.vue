@@ -4,7 +4,7 @@
     v-model="selected"
     as="div"
     class="relative rounded border border-gray-300 px-4 py-1.5 focus-within:z-10 focus-within:border-gray-600 focus-within:ring-1 focus-within:ring-gray-600"
-    :disabled="isDisabled"
+    @click="checkState = true"
   >
     <ComboboxLabel
       :class="{ 'text-gray-700': open, 'text-gray-500': !open }"
@@ -29,6 +29,7 @@
         />
         <ComboboxButton
           class="relative cursor-default bg-transparent py-2 text-left focus-within:ring-0 focus:outline-none focus:ring-0"
+          @click="checkState = true"
         >
           <span class="pointer-events-none right-0 ml-3 flex">
             <SelectorIcon aria-hidden="true" class="h-5 w-5 text-gray-500" />
