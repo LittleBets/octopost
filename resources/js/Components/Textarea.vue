@@ -10,12 +10,13 @@
       </div>
       <textarea
         ref="input"
+        v-bind="$attrs"
+        :value="modelValue"
         :label="label"
         :name="name ?? label"
-        :value="modelValue"
         :required="required"
         class="block w-full border-0 bg-transparent p-0 text-gray-900 placeholder-gray-500 focus:ring-0"
-        v-bind="$attrs"
+        :placeholder="affixPlaceholder ? '' : placeholder"
         @input="$emit('update:modelValue', $event.target.value)"
       />
       <div
@@ -23,6 +24,11 @@
         class="pointer-events-none absolute inset-y-0 right-0 flex items-end pr-3 pb-2"
       >
         <span class="text-gray-500 sm:text-sm"> <slot name="trail" /> </span>
+      </div>
+      <div v-if="placeholder && affixPlaceholder" class="py-2 text-sm text-gray-500">
+        <span>
+          {{ placeholder }}
+        </span>
       </div>
     </div>
   </div>
@@ -37,6 +43,8 @@ defineProps({
   label: { type: String, default: undefined },
   name: { type: String, default: undefined },
   required: { type: Boolean, default: false },
+  placeholder: { type: String, default: undefined },
+  affixPlaceholder: { type: Boolean, default: true },
 })
 defineEmits(['update:modelValue'])
 
