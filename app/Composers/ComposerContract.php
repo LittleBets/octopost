@@ -12,4 +12,5 @@ interface ComposerContract
      */
     public function compose(array $payload, ?string $rootCompositionId = null): array;
     public function prompt(array $payload): CompositionPrompt;
+    public function fake();
 }

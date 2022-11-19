@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Composers\ComposerContract;
-use Facades\App\Composers\ComposerFactory;
+use App\Composers\ComposerFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class UsageController extends Controller
 {
-    public function guess(Request $request): JsonResponse
+    public function guess(Request $request, ComposerFactory $factory): JsonResponse
     {
-        /** @var ComposerContract $composer */
-        $composer = ComposerFactory::make($request->input('template'));
-        $compositionPrompt = $composer->prompt($request->input('payload'));
+        $composer = $factory->make($request->input('template'));
+        // we are using "usage" model to make queries lighter
+        $compositionPrompt = $composer->prompt([...$request->input('payload'), 'model' => 'usage']);
         $prompt = $compositionPrompt->prompt;
         if(strlen($prompt) === 0) {
             return response()->json([

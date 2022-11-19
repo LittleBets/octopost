@@ -17,21 +17,36 @@
 
               <!-- Navigation Links -->
               <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                <NavLink :href="route('compose.new')" :active="route().current('compose.new')">
-                  Compose
+                <NavLink
+                  :href="route('compose.new')"
+                  :active="route().current('compose.new')"
+                  class="space-x-1"
+                >
+                  <icon icon="ph:note-pencil" class="h-5 w-auto text-gray-600" />
+                  <span class="uppercase text-gray-900"> Compose </span>
                 </NavLink>
                 <NavLink
                   :href="route('compositions.show-all')"
                   :active="route().current('compositions.show-all')"
+                  class="space-x-1"
                 >
-                  Compositions
+                  <icon icon="ph:stack" class="h-5 w-auto text-gray-600" />
+                  <span class="uppercase text-gray-900"> Compositions </span>
+                </NavLink>
+                <NavLink
+                  :href="route('tuning.new')"
+                  :active="route().current('tuning.new')"
+                  class="space-x-1"
+                >
+                  <icon icon="ic:outline-model-training" class="h-6 w-auto text-gray-600" />
+                  <span class="uppercase text-gray-900"> Tuner </span>
                 </NavLink>
               </div>
             </div>
 
             <div class="hidden sm:ml-6 sm:flex sm:items-center">
               <div class="relative ml-3">
-                <LinkButton class="mr-4 text-sm" @click="showFeedbackWindow"
+                <LinkButton class="mr-2 text-sm" @click="showFeedbackWindow"
                   >Send Feedback</LinkButton
                 >
               </div>
@@ -225,6 +240,9 @@
             >
               Compositions
             </ResponsiveNavLink>
+            <ResponsiveNavLink as="button" class="text-sm text-sky-600" @click="showFeedbackWindow"
+              >Send Feedback</ResponsiveNavLink
+            >
           </div>
 
           <!-- Responsive Settings Options -->
@@ -350,6 +368,7 @@ import NavLink from '@/Components/NavLink.vue'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
 import LinkButton from '@/Components/LinkButton.vue'
 import { usePage } from '@inertiajs/inertia-vue3'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
 
 defineProps({
   title: String,

@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Composers\ComposerContract;
 use App\Http\Resources\CompositionResource;
 use App\Http\Resources\CompositionResourceMinimal;
 use App\Http\Resources\CompositionResultResource;
 use App\Models\Composition;
 use App\Models\CompositionResult;
-use Facades\App\Composers\ComposerFactory;
+use App\Composers\ComposerFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -48,8 +47,7 @@ class CompositionController extends Controller
         $compositionId = $request->input('composition');
         if($compositionId !== null) {
             $composition = Composition::where('team_id', auth()->user()->current_team_id)
-                ->findOrFail($compositionId)
-            ;
+                ->findOrFail($compositionId);
         }
         return Inertia::render('Compose/ComposeNew', [
             'model' => $request->input('model'),
@@ -57,10 +55,9 @@ class CompositionController extends Controller
         ]);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, ComposerFactory $factory): JsonResponse
     {
-        /** @var ComposerContract $composer */
-        $composer = ComposerFactory::make($request->input('template'));
+        $composer = $factory->make($request->input('template'));
         $modelType = $request->input('model');
         if ($modelType === 'fake') {
             $composer->fake();

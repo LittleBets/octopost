@@ -96,7 +96,6 @@ whenever(and(keys.cmd_enter, isInside), () => {
 })
 
 whenever(and(keys.cmd_shift_S, isInside), () => {
-  console.log('start over')
   emit('startOver')
 })
 </script>

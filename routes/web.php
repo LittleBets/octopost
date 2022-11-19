@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompositionController;
 use App\Http\Controllers\CompositionResultChoiceController;
+use App\Http\Controllers\TuningController;
 use App\Http\Controllers\UsageController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -36,5 +37,9 @@ Route::middleware([
     });
     Route::name('usage.')->prefix('/usage')->group(function () {
         Route::get('/guess', [UsageController::class, 'guess'])->name('guess');
+    });
+    Route::name('tuning.')->prefix('/tuning')->group(function () {
+        Route::get('/', [TuningController::class, 'tune'])->name('new');
+        Route::post('/', [TuningController::class, 'store'])->name('store');
     });
 });
