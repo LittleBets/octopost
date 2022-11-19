@@ -33,14 +33,14 @@
                   <icon icon="ph:stack" class="h-5 w-auto text-gray-600" />
                   <span class="uppercase text-gray-900"> Compositions </span>
                 </NavLink>
-                <NavLink
-                  :href="route('tuning.new')"
-                  :active="route().current('tuning.new')"
-                  class="space-x-1"
-                >
-                  <icon icon="ic:outline-model-training" class="h-6 w-auto text-gray-600" />
-                  <span class="uppercase text-gray-900"> Tuner </span>
-                </NavLink>
+                <!--                <NavLink-->
+                <!--                  :href="route('tuning.new')"-->
+                <!--                  :active="route().current('tuning.new')"-->
+                <!--                  class="space-x-1"-->
+                <!--                >-->
+                <!--                  <icon icon="ic:outline-model-training" class="h-6 w-auto text-gray-600" />-->
+                <!--                  <span class="uppercase text-gray-900"> Tuner </span>-->
+                <!--                </NavLink>-->
               </div>
             </div>
 
