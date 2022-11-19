@@ -22,6 +22,6 @@ class FreeformComposer extends BaseComposer
 
     protected function compositionLabel(array $payload): string
     {
-        return Str::substr($payload['input_prompt'], 0, 50);
+        return Str::substr($payload['input_prompt'], 0, 20) . '...';
     }
 }

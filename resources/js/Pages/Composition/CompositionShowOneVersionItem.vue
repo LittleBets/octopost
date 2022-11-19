@@ -76,22 +76,28 @@ const AmazonListingVersionInfo = defineAsyncComponent(
   () => import('@/Pages/Composition/AmazonListingVersionInfo.vue')
 )
 
+const FreeformVersionInfo = defineAsyncComponent(
+  () => import('@/Pages/Composition/FreeformVersionInfo.vue')
+)
+
 const ResponseVersionInfo = defineAsyncComponent(
   () => import('@/Pages/Composition/ResponseVersionInfo.vue')
 )
 
-const FreeformVersionInfo = defineAsyncComponent(
-  () => import('@/Pages/Composition/FreeformVersionInfo.vue')
+const SummaryVersionInfo = defineAsyncComponent(
+  () => import('@/Pages/Composition/SummaryVersionInfo.vue')
 )
 
 const versionInfoComponent = $computed<Component>(() => {
   switch (props.composition.template) {
     case CompositionTemplateType.AmazonProductListing:
       return AmazonListingVersionInfo
-    case CompositionTemplateType.Response:
-      return ResponseVersionInfo
     case CompositionTemplateType.Freeform:
       return FreeformVersionInfo
+    case CompositionTemplateType.Response:
+      return ResponseVersionInfo
+    case CompositionTemplateType.Summary:
+      return SummaryVersionInfo
   }
   return null
 })

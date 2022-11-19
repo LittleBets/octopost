@@ -13,6 +13,10 @@ const templates: TemplateType[] = [
     id: CompositionTemplateType.Response,
     title: 'Response',
   },
+  {
+    id: CompositionTemplateType.Summary,
+    title: 'Summary',
+  },
 ]
 
 const tones = [

@@ -4,37 +4,26 @@
     :composition-label="compositionLabel"
     :can-submit="canSubmit"
     :payload="payloadForm"
-    :template-type="CompositionTemplateType.Freeform"
+    :template-type="CompositionTemplateType.Summary"
     @submit="submit"
     @start-over="startNewHandler"
   >
     <slot name="header" />
     <Textarea
-      ref="promptRef"
-      v-model="payloadForm.input_prompt"
-      label="Prompt"
-      name="prompt"
+      ref="textRef"
+      v-model="payloadForm.text"
+      label="Text to Summarize"
+      name="text"
       :rows="20"
-      placeholder="e.g. In a friendly tone, write a blog post convincing old ladies to get a cat as their best friend.
-Include keywords cute, cuddly, fury, kittens"
       required
-      affix-placeholder
     />
-    <TextInput
-      v-model.number="payloadForm.composition_length"
-      label="Max Number of Words"
-      :min="20"
-      required
-      type="number"
+    <AudienceSelector
+      v-model:checked="audienceSelectorChecked"
+      title="Target Reader"
+      :model-value="baseComposition?.payload?.audience ?? audiences[0].id"
+      @update:model-value="(val) => (payloadForm.audience = val)"
     />
-    <TextInput
-      v-model.number="payloadForm.variations"
-      label="Number of Variations"
-      :max="5"
-      :min="1"
-      required
-      type="number"
-    />
+    <LengthSelector v-model="payloadForm.composition_length" />
     <template v-if="compositionResult" #result>
       <CompositionResult :result="compositionResult" :version="compositionVersion" class="h-full">
         <template #footer>
@@ -54,12 +43,14 @@ Include keywords cute, cuddly, fury, kittens"
 <script lang="ts" setup>
 import { $computed } from 'vue/macros'
 import { nextTick, PropType, reactive } from 'vue'
-import TextInput from '@/Components/TextInput.vue'
 import Textarea from '@/Components/Textarea.vue'
+import AudienceSelector from '@/Pages/Compose/AudienceSelector.vue'
+import LengthSelector from '@/Pages/Compose/LengthSelector.vue'
 import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
 import ResultFooter from '@/Pages/Compose/ResultFooter.vue'
 import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
+import { audiences } from '@/Pages/Compose/templates'
 import { usePage } from '@inertiajs/inertia-vue3'
 import { CompositionTemplateType } from '@/enums'
 
@@ -67,26 +58,29 @@ const { props: pageProps } = usePage<{ model?: string }>()
 
 const props = defineProps({
   baseComposition: {
-    type: Object as PropType<Composition<FreeformCompositionPayload>>,
+    type: Object as PropType<Composition<SummaryCompositionPayload>>,
     default: () => undefined,
   },
   rootCompositionId: { type: String, default: undefined },
 })
-const template = 'freeform'
+
+const template = CompositionTemplateType.Summary
 
 let compositionResult = $ref<CompositionResult | undefined>(undefined)
 let rootCompositionId = $ref<string | undefined>(props.rootCompositionId)
 let compositionVersion = $ref<number | undefined>(undefined)
 const model = $computed(() => pageProps.value.model)
 
-const payloadForm = reactive<FreeformCompositionPayload>({
+const payloadForm = reactive<SummaryCompositionPayload>({
+  text: props.baseComposition?.payload?.text ?? '',
+  audience: props.baseComposition?.payload?.audience ?? audiences[0].id,
+  composition_length: String(props.baseComposition?.payload?.composition_length ?? 'medium'),
   variations: props.baseComposition?.payload?.variations ?? 1,
-  composition_length: Number(props.baseComposition?.payload?.composition_length ?? 600),
-  input_prompt: props.baseComposition?.payload?.input_prompt ?? '',
 })
+let audienceSelectorChecked = $ref(false)
 
 const isValid = $computed<boolean>(() => {
-  return payloadForm.input_prompt.trim() !== ''
+  return payloadForm.text.trim() !== ''
 })
 
 let processing = $ref(false)
@@ -95,11 +89,14 @@ const canSubmit = $computed(() => {
 })
 
 async function submit() {
-  processing = true
   try {
+    processing = true
     const { data } = await axios.post(route('compositions.store'), {
       template,
-      payload: payloadForm,
+      payload: {
+        ...payloadForm,
+        audience: audienceSelectorChecked ? payloadForm.audience : undefined,
+      },
       root_composition_id: rootCompositionId,
       model,
     })
@@ -125,9 +122,11 @@ function startNewHandler() {
 }
 
 function resetPayloadForm() {
+  payloadForm.text = ''
   payloadForm.variations = 1
-  payloadForm.composition_length = 600
-  payloadForm.input_prompt = ''
+  payloadForm.audience = undefined
+  payloadForm.composition_length = 'short'
+  audienceSelectorChecked = false
 }
 
 function resetResult() {
@@ -138,11 +137,11 @@ function resetResult() {
 
 let compositionLabel = $ref<string | undefined>(props.baseComposition?.label)
 
-const promptRef = $ref<HTMLElement>()
+const textRef = $ref<HTMLElement>()
 
 function setFocus() {
   nextTick(() => {
-    promptRef?.focus()
+    textRef?.focus()
   })
 }
 

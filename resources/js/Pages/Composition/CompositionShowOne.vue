@@ -84,22 +84,28 @@ const AmazonListingResultHeader = defineAsyncComponent(
   () => import('@/Pages/Composition/AmazonListingResultHeader.vue')
 )
 
+const FreeformResultHeader = defineAsyncComponent(
+  () => import('@/Pages/Composition/FreeformResultHeader.vue')
+)
+
 const ResponseResultHeader = defineAsyncComponent(
   () => import('@/Pages/Composition/ResponseResultHeader.vue')
 )
 
-const FreeformResultHeader = defineAsyncComponent(
-  () => import('@/Pages/Composition/FreeformResultHeader.vue')
+const SummaryResultHeader = defineAsyncComponent(
+  () => import('@/Pages/Composition/SummaryResultHeader.vue')
 )
 
 const resultHeader = $computed<Component>(() => {
   switch (props.composition.template) {
     case CompositionTemplateType.AmazonProductListing:
       return AmazonListingResultHeader
-    case CompositionTemplateType.Response:
-      return ResponseResultHeader
     case CompositionTemplateType.Freeform:
       return FreeformResultHeader
+    case CompositionTemplateType.Response:
+      return ResponseResultHeader
+    case CompositionTemplateType.Summary:
+      return SummaryResultHeader
   }
   return null
 })

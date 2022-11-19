@@ -29,7 +29,7 @@ class ResponseComposer extends BaseComposer
 
     protected function compositionLabel(array $payload): string
     {
-        return Str::substr($payload['message'], 0, 15);
+        return Str::substr($payload['message'], 0, 20) . '...';
     }
 
     public function modelName(array $payload): string

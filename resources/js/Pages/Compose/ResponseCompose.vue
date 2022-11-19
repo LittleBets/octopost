@@ -81,20 +81,20 @@ const props = defineProps({
   rootCompositionId: { type: String, default: undefined },
 })
 
-const template = 'response'
+const template = CompositionTemplateType.Response
 
 let compositionResult = $ref<CompositionResult | undefined>(undefined)
 let rootCompositionId = $ref<string | undefined>(props.rootCompositionId)
 let compositionVersion = $ref<number | undefined>(undefined)
 const model = $computed(() => pageProps.value.model)
 
-const payloadForm = reactive<Fields>({
+const payloadForm = reactive<ResponseCompositionPayload>({
   tone: props.baseComposition?.payload?.tone ?? tones[0].id,
   response_type: props.baseComposition?.payload?.response_type ?? responseTypes[0].id,
   message: props.baseComposition?.payload?.message ?? '',
   variations: props.baseComposition?.payload?.variations ?? 1,
   audience: props.baseComposition?.payload?.audience ?? audiences[0].id,
-  composition_length: String(props.baseComposition?.payload?.composition_length) ?? 'short',
+  composition_length: String(props.baseComposition?.payload?.composition_length ?? 'short'),
 })
 let audienceSelectorChecked = $ref(false)
 let toneSelectorChecked = $ref(false)
@@ -170,13 +170,4 @@ function setFocus() {
 }
 
 setFocus()
-
-interface Fields {
-  tone: string
-  response_type: string
-  message: string
-  variations: number
-  audience?: string
-  composition_length: string
-}
 </script>

@@ -12,24 +12,28 @@ declare global {
   }
 
   interface CompositionPayload extends Record<string, unknown> {
-    name: string
     audience?: string
-    response_type: string
     composition_length: string | number
-    tone: string
+    tone?: string
     variations: number
   }
 
   interface ResponseCompositionPayload extends CompositionPayload {
     message: string
+    response_type: string
   }
 
   interface AmazonListingCompositionPayload extends CompositionPayload {
+    name: string
     features: string
   }
 
   interface FreeformCompositionPayload extends CompositionPayload {
     input_prompt: string
+  }
+
+  interface SummaryCompositionPayload extends CompositionPayload {
+    text: string
   }
 
   interface Composition<PayloadType extends CompositionPayload = CompositionPayload> {

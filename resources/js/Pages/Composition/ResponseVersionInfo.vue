@@ -8,9 +8,6 @@
       >&nbsp;{{ composition.payload.response_type }}
     </span>
     <span> response</span>
-    <template v-if="composition.payload.name">
-      <span class="my-1 py-0.5 font-semibold text-gray-800">{{ composition.payload.name }}</span>
-    </template>
     <template v-if="composition.payload.audience">
       addressing
       <span class="my-1 py-0.5 font-semibold text-gray-800">{{
@@ -29,6 +26,9 @@
 import { PropType } from 'vue'
 
 defineProps({
-  composition: { type: Object as PropType<Composition>, required: true },
+  composition: {
+    type: Object as PropType<Composition<ResponseCompositionPayload>>,
+    required: true,
+  },
 })
 </script>

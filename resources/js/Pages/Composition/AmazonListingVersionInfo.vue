@@ -22,7 +22,10 @@
 <script setup lang="ts">
 import { PropType } from 'vue'
 
-const props = defineProps({
-  composition: { type: Object as PropType<Composition>, required: true },
+defineProps({
+  composition: {
+    type: Object as PropType<Composition<AmazonListingCompositionPayload>>,
+    required: true,
+  },
 })
 </script>
