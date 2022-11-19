@@ -12,10 +12,12 @@
     <TextInput ref="productNameRef" v-model="payloadForm.name" label="Product Name" required />
     <Textarea
       v-model="payloadForm.features"
-      label="Product Features"
+      label="Product Features (comma separated)"
       name="product_features"
       :rows="8"
       required
+      placeholder="e.g. smooth, machine washable, comfortable, durable, pet and kid friendly"
+      affix-placeholder
     />
     <ToneSelector
       v-model:checked="toneSelectorChecked"

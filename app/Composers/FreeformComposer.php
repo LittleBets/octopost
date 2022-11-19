@@ -11,8 +11,6 @@ class FreeformComposer extends BaseComposer
     {
         $maxWords = $payload['composition_length'];
 
-        clock($payload);
-
         return CompositionPrompt::from([
             'model' => $payload['model'] ?? 'text-davinci-002',
             'prompt' => $payload['input_prompt'] ?? '',

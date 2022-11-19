@@ -44,7 +44,7 @@ defineProps({
   name: { type: String, default: undefined },
   required: { type: Boolean, default: false },
   placeholder: { type: String, default: undefined },
-  affixPlaceholder: { type: Boolean, default: true },
+  affixPlaceholder: { type: Boolean, default: false },
 })
 defineEmits(['update:modelValue'])
 

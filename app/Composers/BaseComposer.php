@@ -52,6 +52,7 @@ abstract class BaseComposer implements ComposerContract
                 ...$prompt->toArray(),
                 ...$payload,
             ],
+            'prompt' => $prompt->prompt,
             'user_id' => auth()->id(),
             'team_id' => auth()->user()->current_team_id,
             'root_composition_id' => $rootCompositionId,

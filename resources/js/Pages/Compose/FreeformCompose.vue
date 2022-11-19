@@ -18,6 +18,7 @@
       placeholder="e.g. In a friendly tone, write a blog post convincing old ladies to get a cat as their best friend.
 Include keywords cute, cuddly, fury, kittens"
       required
+      affix-placeholder
     />
     <TextInput
       v-model.number="payloadForm.composition_length"
