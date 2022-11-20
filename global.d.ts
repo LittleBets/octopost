@@ -15,6 +15,7 @@ declare global {
   interface User {
     name: string
     all_teams: Team[]
+    current_team_id: string
   }
 
   interface CompositionPayload extends Record<string, unknown> {

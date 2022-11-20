@@ -43,7 +43,7 @@
       <div class="">
         <h3 class="text-lg font-medium leading-6 text-gray-900">Usage by team</h3>
         <div class="mt-5 rounded-lg bg-white px-4 py-4 shadow">
-          <ListItemSelector v-model="selectedTeam" :options="teams" title="Select a Team" />
+          <ListItemSelector v-model="selectedTeamId" :options="teams" title="Select a Team" />
 
           <dl
             class="mt-5 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden bg-white md:grid-cols-3 md:divide-y-0 md:divide-x"
@@ -103,10 +103,10 @@ const props = defineProps({
   usageByTeams: { type: Object as PropType<Usage[]>, required: true },
 })
 
-const selectedTeam = $ref(teams[0].id)
+const selectedTeamId = $ref((teams.find((team) => team.id === user.current_team_id) ?? teams[0]).id)
 
 const selectedTeamUsage = $computed<Usage | undefined>(() =>
-  props.usageByTeams.find((usage) => usage.team_id === selectedTeam)
+  props.usageByTeams.find((usage) => usage.team_id === selectedTeamId)
 )
 
 const totals = $computed(() => {
