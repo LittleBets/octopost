@@ -7,8 +7,14 @@ declare global {
   const axios: Axios
   const route: typeof ziggyRoute
 
+  interface Team {
+    id: string
+    name: string
+  }
+
   interface User {
     name: string
+    all_teams: Team[]
   }
 
   interface CompositionPayload extends Record<string, unknown> {

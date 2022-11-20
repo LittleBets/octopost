@@ -3,12 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Composers\ComposerFactory;
+use App\Models\Usage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Inertia\Inertia;
 
 class UsageController extends Controller
 {
+    public function show()
+    {
+        $user = auth()->user();
+        $usage = Usage::teamUsageByInterval('month')
+            ->where('organization_id', $user->organization_id)
+            ->get();
+        return Inertia::render('Usage/UsageShow', [
+            'usageByTeams' => $usage,
+        ]);
+    }
+
     public function guess(Request $request, ComposerFactory $factory): JsonResponse
     {
         $composer = $factory->make($request->input('template'));

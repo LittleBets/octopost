@@ -29,4 +29,9 @@ class Composition extends BaseModel
     public function childrenCompositions() {
         return $this->hasMany(Composition::class, 'root_composition_id');
     }
+
+    public function usage()
+    {
+        return $this->morphOne(Usage::class, 'usageable');
+    }
 }

@@ -180,6 +180,10 @@
 
                     <div class="border-t border-gray-100" />
 
+                    <DropdownLink :href="route('usage.show')"> Credits Usage </DropdownLink>
+
+                    <div class="border-t border-gray-100" />
+
                     <!-- Authentication -->
                     <form @submit.prevent="logout">
                       <DropdownLink as="button"> Log Out </DropdownLink>

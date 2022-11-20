@@ -36,6 +36,7 @@ Route::middleware([
         Route::delete('/{composition_result_choice_id}', [CompositionResultChoiceController::class, 'destroy'])->name('destroy');
     });
     Route::name('usage.')->prefix('/usage')->group(function () {
+        Route::get('/', [UsageController::class, 'show'])->name('show');
         Route::get('/guess', [UsageController::class, 'guess'])->name('guess');
     });
 //    Route::name('tuning.')->prefix('/tuning')->group(function () {

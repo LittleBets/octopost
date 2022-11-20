@@ -4,6 +4,7 @@ namespace App\Composers;
 
 use App\Models\Composition;
 use App\Models\CompositionResult;
+use App\Models\Usage;
 use Faker\Factory;
 use OpenAI\Client as OpenAIClient;
 use OpenAI\Responses\Completions\CreateResponse;
@@ -18,7 +19,8 @@ abstract class BaseComposer implements ComposerContract
 
     abstract public function prompt(array $payload): CompositionPrompt;
 
-    protected function compositionLabel(array $payload): string {
+    protected function compositionLabel(array $payload): string
+    {
         return $payload['label'] ?? $payload['name'] ?? 'Untitled';
     }
 
@@ -61,12 +63,33 @@ abstract class BaseComposer implements ComposerContract
 
     private function saveResponse(CreateResponse $response, Composition $composition): CompositionResult
     {
+        $tokensUsage = $response->usage;
+        $creditsUsage = [
+            'prompt_credits' => $this->convertTokenLengthToWordCredits($tokensUsage->promptTokens),
+            'completion_credits' => $this->convertTokenLengthToWordCredits($tokensUsage->completionTokens),
+            'total_credits' => $this->convertTokenLengthToWordCredits($tokensUsage->promptTokens + $tokensUsage->completionTokens),
+        ];
         $result = CompositionResult::create([
             'remote_id' => $response->id,
             'type' => $response->object,
             'model' => $response->model,
-            'usage' => $response->usage->toArray(),
+            'usage' => [
+                ...$response->usage->toArray(),
+                ...$creditsUsage,
+            ],
             'composition_id' => $composition->id,
+        ]);
+
+        $composition->usage()->create([
+            'prompt_credits' => $creditsUsage['prompt_credits'],
+            'completion_credits' => $creditsUsage['completion_credits'],
+            'total_credits' => $creditsUsage['total_credits'],
+            'user_id' => auth()->user()->id,
+            'team_id' => auth()->user()->current_team_id,
+            'organization_id' => auth()->user()->organization_id,
+            'extras' => [
+                'tokens_usage' => $tokensUsage->toArray(),
+            ]
         ]);
 
         $choiceCollection = collect($response->choices)->map(function ($choice) use ($result) {
@@ -93,7 +116,7 @@ abstract class BaseComposer implements ComposerContract
     {
         $faker = Factory::create();
         $variations = $prompt->n;
-        $length = ceil($this->convertWordCreditsToTokensLength($prompt->maxTokens)/100);
+        $length = ceil($this->convertWordCreditsToTokensLength($prompt->maxTokens) / 100);
         $choices = collect(range(0, $variations - 1))->map(function ($idx) use ($faker, $length) {
             return [
                 'text' => $faker->paragraphs($faker->numberBetween($length, ceil($length)), true),
@@ -102,15 +125,12 @@ abstract class BaseComposer implements ComposerContract
                 'finish_reason' => 'length',
             ];
         })->toArray();
-        $promptToken = $faker->numberBetween(10, 80);
-        $completionToken = $faker->numberBetween(20, 30 * count($choices));
+        $promptTokens = $faker->numberBetween(10, 80);
+        $completionTokens = $faker->numberBetween(20, 30 * count($choices));
         $usage = [
-            'prompt_tokens' => $promptToken,
-            'completion_tokens' => $completionToken,
-            'total_tokens' => $promptToken + $completionToken,
-            'prompt_credits' => $this->convertTokenLengthToWordCredits($promptToken),
-            'completion_credits' => $this->convertTokenLengthToWordCredits($completionToken),
-            'total_credits' => $this->convertTokenLengthToWordCredits($promptToken + $completionToken),
+            'prompt_tokens' => $promptTokens,
+            'completion_tokens' => $completionTokens,
+            'total_tokens' => $promptTokens + $completionTokens,
         ];
         $attributes = [
             'id' => $faker->uuid(),

@@ -79,7 +79,7 @@ const compositionLengths = [
 const responseTypes = [
   { id: 'email', title: 'Email' },
   { id: 'tweet', title: 'Tweet' },
-  { id: 'fb', title: 'Facebook Post' },
+  { id: 'facebook post', title: 'Facebook Post' },
   { id: 'message', title: 'Message' },
 ]
 

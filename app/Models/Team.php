@@ -30,4 +30,8 @@ class Team extends JetstreamTeam
     {
         return $this->belongsTo(Organization::class);
     }
+
+    public function usage() {
+        return $this->hasMany(Usage::class);
+    }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Composers\ComposerFactory;
 use App\Http\Resources\CompositionResource;
 use App\Http\Resources\CompositionResourceMinimal;
 use App\Http\Resources\CompositionResultResource;
 use App\Models\Composition;
 use App\Models\CompositionResult;
-use App\Composers\ComposerFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,13 +17,15 @@ class CompositionController extends Controller
 {
     public function showAll(Request $request): Response
     {
-        $compositions = Composition::where('team_id', auth()->user()->current_team_id)
+        $user = auth()->user();
+        $compositions = Composition::where('team_id', $user->current_team_id)
             ->where('root_composition_id', null)
-            ->where('team_id', auth()->user()->current_team_id)
+            ->where('team_id', $user->current_team_id)
             ->with('user')
             ->withCount(['childrenCompositions as versions'])
             ->latest()
             ->get();
+
         return Inertia::render('Composition/CompositionShowAll', [
             'compositions' => CompositionResourceMinimal::collection($compositions)
         ]);
@@ -45,7 +47,7 @@ class CompositionController extends Controller
     {
         $composition = null;
         $compositionId = $request->input('composition');
-        if($compositionId !== null) {
+        if ($compositionId !== null) {
             $composition = Composition::where('team_id', auth()->user()->current_team_id)
                 ->findOrFail($compositionId);
         }
@@ -91,7 +93,7 @@ class CompositionController extends Controller
             ->where('team_id', auth()->user()->current_team_id)
             ->delete();
         $returnTo = $request->return_to;
-        if($returnTo !== null) {
+        if ($returnTo !== null) {
             return redirect()->route($returnTo);
         } else {
             return redirect()->back();
