@@ -27,14 +27,7 @@ Include keywords cute, cuddly, fury, kittens"
       required
       type="number"
     />
-    <TextInput
-      v-model.number="payloadForm.variations"
-      label="Number of Variations"
-      :max="5"
-      :min="1"
-      required
-      type="number"
-    />
+    <VariationInput v-model="payloadForm.variations" />
     <template v-if="compositionResult" #result>
       <CompositionResult :result="compositionResult" :version="compositionVersion" class="h-full">
         <template #footer>
@@ -62,6 +55,7 @@ import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
 import { usePage } from '@inertiajs/inertia-vue3'
 import { CompositionTemplateType } from '@/enums'
+import VariationInput from '@/Pages/Compose/VariationInput.vue'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 

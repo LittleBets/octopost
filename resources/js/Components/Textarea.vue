@@ -5,7 +5,7 @@
     >
       <div class="text-gray-500 group-focus-within:text-gray-700">
         <slot name="label">
-          <RequiredFieldLabel v-if="label" :label="label" :required="required" />
+          <RequiredFieldLabel v-if="label" :label="label" :required="required" class="pb-2" />
         </slot>
       </div>
       <textarea

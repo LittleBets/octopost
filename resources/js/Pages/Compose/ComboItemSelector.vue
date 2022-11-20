@@ -10,7 +10,13 @@
       :class="{ 'text-gray-700': open, 'text-gray-500': !open }"
       class="block text-sm font-medium"
     >
-      {{ title }}
+      <RequiredFieldLabel :label="title" :with-tooltip="tooltip != null">
+        <template #tooltip>
+          <slot name="tooltip">
+            {{ tooltip }}
+          </slot>
+        </template>
+      </RequiredFieldLabel>
     </ComboboxLabel>
     <div class="relative">
       <div class="flex w-full items-center">
@@ -102,6 +108,8 @@ import {
 } from '@headlessui/vue'
 import SelectorIcon from '@/Components/Icons/SelectorIcon.vue'
 import Checkbox from '@/Components/Checkbox.vue'
+import InfoTooltip from '@/Components/InfoTooltip.vue'
+import RequiredFieldLabel from '@/Components/RequiredFieldLabel.vue'
 
 const {
   title,
@@ -110,6 +118,7 @@ const {
   checked = true,
   disabled = false,
   options = [],
+  tooltip = undefined,
 } = defineProps<Props>()
 const emit = defineEmits(['update:modelValue', 'update:checked'])
 
@@ -152,5 +161,6 @@ interface Props {
   withCheckbox?: boolean
   checked?: boolean
   disabled?: boolean
+  tooltip?: string
 }
 </script>

@@ -1,4 +1,3 @@
-<!--suppress XmlInvalidId -->
 <template>
   <div class="isolate rounded-md shadow-sm">
     <div
@@ -6,7 +5,19 @@
     >
       <div class="text-gray-500 group-focus-within:text-gray-700">
         <slot name="label">
-          <RequiredFieldLabel v-if="label" :label="label" :required="required" />
+          <RequiredFieldLabel
+            v-if="label"
+            :label="label"
+            :required="required"
+            class="pb-2"
+            :with-tooltip="tooltip != null"
+          >
+            <template #tooltip>
+              <slot name="tooltip">
+                {{ tooltip }}
+              </slot>
+            </template>
+          </RequiredFieldLabel>
         </slot>
       </div>
       <div class="-mt-px">
@@ -38,6 +49,7 @@ defineProps({
   name: { type: String, default: undefined },
   type: { type: String, default: 'text' },
   required: { type: Boolean, default: false },
+  tooltip: { type: String, default: undefined },
 })
 defineEmits(['update:modelValue'])
 

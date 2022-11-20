@@ -12,7 +12,7 @@ interface Props {
   modelValue?: string
 }
 
-const { title = 'Responding To', modelValue = null } = defineProps<Props>()
+const { title = 'Response Type', modelValue = null } = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 
 const selected = computed({

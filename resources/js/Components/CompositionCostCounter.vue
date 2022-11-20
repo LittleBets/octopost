@@ -1,12 +1,10 @@
 <template>
   <div class="space-x-1 rounded-full bg-gray-200 px-3 py-1 text-sm font-semibold">
     <InfoTooltip>
-      <template #default>
-        <div class="mr-2 inline-flex items-center gap-1">
-          <icon icon="wpf:coins" class="h-4 w-4 text-gray-500" />
-          <span class="text-gray-700">{{ usage.total_credits }}</span>
-        </div>
-      </template>
+      <div class="mr-2 inline-flex items-center gap-1">
+        <icon icon="wpf:coins" class="h-4 w-4 text-gray-500" />
+        <span class="text-gray-700">{{ usage.total_credits }}</span>
+      </div>
       <template #content>
         <div>
           <h3 class="text-lg font-medium leading-6 text-gray-900">Usage Cost</h3>

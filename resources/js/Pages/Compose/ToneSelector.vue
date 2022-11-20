@@ -5,6 +5,7 @@
     :options="availableTones"
     :title="title"
     with-checkbox
+    tooltip="Tone of the output. Keep it unchecked for a neutral tone or type-in a custom one (and hit enter)."
   />
 </template>
 

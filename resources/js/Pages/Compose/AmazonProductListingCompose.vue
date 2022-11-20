@@ -30,14 +30,7 @@
       @update:model-value="(val) => (payloadForm.audience = val)"
     />
     <LengthSelector v-model="payloadForm.composition_length" />
-    <TextInput
-      v-model.number="payloadForm.variations"
-      label="Number of Variations"
-      :max="5"
-      :min="1"
-      required
-      type="number"
-    />
+    <VariationInput v-model="payloadForm.variations" />
     <template v-if="compositionResult" #result>
       <CompositionResult :result="compositionResult" :version="compositionVersion" class="h-full">
         <template #footer>
@@ -69,6 +62,7 @@ import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
 import { tones, audiences } from '@/Pages/Compose/templates'
 import { usePage } from '@inertiajs/inertia-vue3'
 import { CompositionTemplateType } from '@/enums'
+import VariationInput from '@/Pages/Compose/VariationInput.vue'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 

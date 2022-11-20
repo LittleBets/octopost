@@ -5,6 +5,7 @@
     :options="availableAudiences"
     :title="title"
     with-checkbox
+    tooltip="Keep it unchecked for a generic audience or type-in a custom audience/reader (and hit enter)."
   />
 </template>
 
