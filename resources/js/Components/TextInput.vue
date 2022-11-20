@@ -9,7 +9,7 @@
             v-if="label"
             :label="label"
             :required="required"
-            class="pb-2"
+            class="pb-1"
             :with-tooltip="tooltip != null"
           >
             <template #tooltip>

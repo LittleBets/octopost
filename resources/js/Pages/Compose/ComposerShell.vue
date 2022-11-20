@@ -38,7 +38,7 @@
                 label="New"
                 @click="emit('startOver')"
               />
-              <PrimaryButton :disabled="!canSubmit" type="button">
+              <PrimaryButton :disabled="!canSubmit" type="button" @click="emit('submit')">
                 <span>
                   <span>{{ rootCompositionId == null ? 'Compose' : 'Recompose' }}</span
                   ><span class="hidden md:inline">&nbsp; &nbsp; &#8984;&#8617;</span>

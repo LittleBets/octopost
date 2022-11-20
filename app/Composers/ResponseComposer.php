@@ -15,7 +15,7 @@ class ResponseComposer extends BaseComposer
         $toneLiteral = $tone ? " in a {$tone} tone" : ' ';
         $model = $this->modelName($payload);
         $responseType = $payload['response_type'];
-        $message = trim($payload['message']);
+        $message = trim($payload['message'] ?? '');
 
         return CompositionPrompt::from([
             'model' => $model,
