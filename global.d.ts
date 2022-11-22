@@ -41,6 +41,7 @@ declare global {
 
   interface SummaryCompositionPayload extends CompositionPayload {
     text: string
+    output_format: string
   }
 
   interface Composition<PayloadType extends CompositionPayload = CompositionPayload> {

@@ -42,9 +42,9 @@ const tones = [
 ]
 
 const audiences = [
-  { id: 'friends', title: 'Friends' },
   { id: 'clients', title: 'Clients' },
   { id: 'boss', title: 'Boss' },
+  { id: 'friends', title: 'Friends' },
   { id: 'parents', title: 'Parents' },
   { id: 'women', title: 'Women' },
   { id: 'men', title: 'Men' },
@@ -53,8 +53,12 @@ const audiences = [
   { id: 'adults', title: 'Adults' },
   { id: 'seniors', title: 'Seniors' },
   { id: 'adventurers', title: 'Adventurers' },
-  { id: 'beauty_fans', title: 'Beauty Fans' },
   { id: 'trendsetters', title: 'trendsetters' },
+]
+
+const summaryOutputFormats = [
+  { id: 'paragraph', title: 'Paragraph' },
+  { id: 'bullet points', title: 'Bullet Points' },
 ]
 
 const compositionLengths = [
@@ -83,4 +87,4 @@ const responseTypes = [
   { id: 'message', title: 'Message' },
 ]
 
-export { templates, tones, audiences, compositionLengths, responseTypes }
+export { templates, tones, audiences, compositionLengths, responseTypes, summaryOutputFormats }

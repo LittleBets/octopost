@@ -17,6 +17,11 @@
       :rows="20"
       required
     />
+    <ListItemSelector
+      v-model="payloadForm.output_format"
+      :options="summaryOutputFormats"
+      title="Output Format"
+    />
     <AudienceSelector
       v-model:checked="audienceSelectorChecked"
       title="Target Reader"
@@ -50,9 +55,10 @@ import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
 import ResultFooter from '@/Pages/Compose/ResultFooter.vue'
 import ComposerShell from '@/Pages/Compose/ComposerShell.vue'
 import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
-import { audiences } from '@/Pages/Compose/templates'
+import { audiences, summaryOutputFormats } from '@/Pages/Compose/templates'
 import { usePage } from '@inertiajs/inertia-vue3'
 import { CompositionTemplateType } from '@/enums'
+import ListItemSelector from '@/Pages/Compose/ListItemSelector.vue'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 
@@ -76,6 +82,7 @@ const payloadForm = reactive<SummaryCompositionPayload>({
   audience: props.baseComposition?.payload?.audience ?? audiences[0].id,
   composition_length: String(props.baseComposition?.payload?.composition_length ?? 'medium'),
   variations: props.baseComposition?.payload?.variations ?? 1,
+  output_format: props.baseComposition?.payload?.output_format ?? summaryOutputFormats[0].id,
 })
 let audienceSelectorChecked = $ref(false)
 
