@@ -17,9 +17,9 @@ class SummaryComposer extends BaseComposer
 
         return CompositionPrompt::from([
             'model' => $model,
-            'prompt' => sprintf("Summarize this%s%s:%s%s%s", $outputFormatLiteral, $addressingLiteral, PHP_EOL, $text, config('consts.response_separator')),
+            'prompt' => sprintf("Summarize%s%s:%s%s%s", $outputFormatLiteral, $addressingLiteral, PHP_EOL, $text, config('consts.response_separator')),
             'max_tokens' => $this->compositionLengthToTokens($payload['composition_length']),
-            'temperature' => 0.7,
+            'temperature' => 0.1,
             'n' => $payload['variations'],
         ]);
     }
@@ -36,6 +36,6 @@ class SummaryComposer extends BaseComposer
             return $payloadModel;
         }
         $audience = $payload['audience'] ?? null;
-        return $audience == null ? 'text-curie-001' : 'text-davinci-002';
+        return $audience == null ? 'text-curie-001' : 'text-davinci-003';
     }
 }

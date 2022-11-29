@@ -28,6 +28,7 @@ declare global {
   interface ResponseCompositionPayload extends CompositionPayload {
     message: string
     response_type: string
+    points_to_include?: string
   }
 
   interface AmazonListingCompositionPayload extends CompositionPayload {

@@ -13,10 +13,19 @@
     <Textarea
       ref="messageRef"
       v-model="payloadForm.message"
-      label="Message to Reply"
+      label="Original Message"
       name="message"
       :rows="12"
-      required
+      placeholder="The message your are responding to. You can skip this and just include the main points below or you can use both."
+      affix-placeholder
+    />
+    <Textarea
+      v-model="payloadForm.points_to_include"
+      label="Points to Include"
+      name="points"
+      :rows="6"
+      placeholder="e.g: issue is legit, management notified, followup soon, etc."
+      affix-placeholder
     />
     <ToneSelector
       v-model:checked="toneSelectorChecked"
@@ -50,7 +59,6 @@
 <script lang="ts" setup>
 import { $computed } from 'vue/macros'
 import { nextTick, PropType, reactive } from 'vue'
-import TextInput from '@/Components/TextInput.vue'
 import ToneSelector from '@/Pages/Compose/ToneSelector.vue'
 import Textarea from '@/Components/Textarea.vue'
 import AudienceSelector from '@/Pages/Compose/AudienceSelector.vue'
@@ -89,12 +97,13 @@ const payloadForm = reactive<ResponseCompositionPayload>({
   variations: props.baseComposition?.payload?.variations ?? 1,
   audience: props.baseComposition?.payload?.audience ?? audiences[0].id,
   composition_length: String(props.baseComposition?.payload?.composition_length ?? 'short'),
+  points_to_include: props.baseComposition?.payload?.points_to_include ?? '',
 })
 let audienceSelectorChecked = $ref(false)
 let toneSelectorChecked = $ref(false)
 
 const isValid = $computed<boolean>(() => {
-  return payloadForm.message.trim() !== ''
+  return payloadForm.message.trim() !== '' || payloadForm.points_to_include?.trim() !== ''
 })
 
 let processing = $ref(false)
