@@ -45,6 +45,11 @@ declare global {
     output_format: string
   }
 
+  interface RewriteCompositionPayload extends CompositionPayload {
+    text: string
+    rewrite_type: string
+  }
+
   interface Composition<PayloadType extends CompositionPayload = CompositionPayload> {
     id: string
     children: Composition<PayloadType>[]

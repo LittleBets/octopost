@@ -17,6 +17,7 @@ class ComposerFactory
             'amazon-product-listing' => new AmazonProductListingComposer($this->client, $template),
             'freeform' => new FreeformComposer($this->client, $template),
             'response' => new ResponseComposer($this->client, $template),
+            'rewrite' => new RewriteComposer($this->client, $template),
             'summary' => new SummaryComposer($this->client, $template),
             default => throw new InvalidArgumentException(sprintf('Invalid template %s', $template)),
         };

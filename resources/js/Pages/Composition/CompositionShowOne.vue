@@ -92,6 +92,10 @@ const ResponseResultHeader = defineAsyncComponent(
   () => import('@/Pages/Composition/ResponseResultHeader.vue')
 )
 
+const RewriteResultHeader = defineAsyncComponent(
+  () => import('@/Pages/Composition/RewriteResultHeader.vue')
+)
+
 const SummaryResultHeader = defineAsyncComponent(
   () => import('@/Pages/Composition/SummaryResultHeader.vue')
 )
@@ -104,6 +108,8 @@ const resultHeader = $computed<Component>(() => {
       return FreeformResultHeader
     case CompositionTemplateType.Response:
       return ResponseResultHeader
+    case CompositionTemplateType.Rewrite:
+      return RewriteResultHeader
     case CompositionTemplateType.Summary:
       return SummaryResultHeader
   }

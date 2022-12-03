@@ -30,6 +30,7 @@ const AmazonProductListingTemplate = defineAsyncComponent(
 )
 const FreeformTemplate = defineAsyncComponent(() => import('@/Pages/Compose/FreeformCompose.vue'))
 const ResponseTemplate = defineAsyncComponent(() => import('@/Pages/Compose/ResponseCompose.vue'))
+const RewriteTemplate = defineAsyncComponent(() => import('@/Pages/Compose/RewriteCompose.vue'))
 const SummaryTemplate = defineAsyncComponent(() => import('@/Pages/Compose/SummaryCompose.vue'))
 
 const template: CompositionTemplateType = $ref<CompositionTemplateType>(
@@ -44,6 +45,8 @@ const templateComposer = computed(() => {
       return FreeformTemplate
     case CompositionTemplateType.Response:
       return ResponseTemplate
+    case CompositionTemplateType.Rewrite:
+      return RewriteTemplate
     case CompositionTemplateType.Summary:
       return SummaryTemplate
   }

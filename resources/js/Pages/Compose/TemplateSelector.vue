@@ -12,7 +12,7 @@ interface Props {
   modelValue?: string
 }
 
-const { title = 'Select a Project', modelValue = null } = defineProps<Props>()
+const { title = 'Select a Composition Type', modelValue = null } = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 
 const selected = computed({

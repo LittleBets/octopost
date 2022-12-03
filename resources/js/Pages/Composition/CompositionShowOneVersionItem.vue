@@ -83,6 +83,9 @@ const FreeformVersionInfo = defineAsyncComponent(
 const ResponseVersionInfo = defineAsyncComponent(
   () => import('@/Pages/Composition/ResponseVersionInfo.vue')
 )
+const RewriteVersionInfo = defineAsyncComponent(
+  () => import('@/Pages/Composition/RewriteVersionInfo.vue')
+)
 
 const SummaryVersionInfo = defineAsyncComponent(
   () => import('@/Pages/Composition/SummaryVersionInfo.vue')
@@ -96,6 +99,8 @@ const versionInfoComponent = $computed<Component>(() => {
       return FreeformVersionInfo
     case CompositionTemplateType.Response:
       return ResponseVersionInfo
+    case CompositionTemplateType.Rewrite:
+      return RewriteVersionInfo
     case CompositionTemplateType.Summary:
       return SummaryVersionInfo
   }

@@ -5,11 +5,19 @@
     as="div"
     class="relative rounded border border-gray-300 px-4 py-1.5 focus-within:z-10 focus-within:border-gray-600 focus-within:ring-1 focus-within:ring-gray-600"
     :disabled="isDisabled"
+    @click="checkState = true"
   >
     <ListboxLabel
       :class="{ 'text-gray-700': open, 'text-gray-500': !open }"
       class="block text-sm font-medium"
-      >{{ title }}
+    >
+      <RequiredFieldLabel :label="title" :with-tooltip="tooltip != null">
+        <template #tooltip>
+          <slot name="tooltip">
+            {{ tooltip }}
+          </slot>
+        </template>
+      </RequiredFieldLabel>
     </ListboxLabel>
     <div class="relative">
       <div class="flex items-center">
@@ -20,12 +28,13 @@
           :disabled="disabled"
         />
         <ListboxButton
-          class="relative w-full cursor-default bg-transparent py-2 pr-10 text-left focus-within:ring-0 focus:outline-none focus:ring-0"
+          class="relative flex w-full cursor-default items-center bg-transparent py-2 pr-10 text-left focus-within:ring-0 focus:outline-none focus:ring-0"
+          @click="checkState = true"
         >
-          <span class="truncate" :class="{ 'text-gray-500': isDisabled }">{{
+          <span class="flex-1 truncate" :class="{ 'text-gray-500': isDisabled }">{{
             selected.title
           }}</span>
-          <span class="pointer-events-none absolute inset-y-0 right-0 ml-3">
+          <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center">
             <SelectorIcon aria-hidden="true" class="h-5 w-5 text-gray-500" />
           </span>
         </ListboxButton>
@@ -89,6 +98,7 @@ import {
   ListboxOptions,
 } from '@headlessui/vue'
 import Checkbox from '@/Components/Checkbox.vue'
+import RequiredFieldLabel from '@/Components/RequiredFieldLabel.vue'
 
 const {
   title,
@@ -97,6 +107,7 @@ const {
   withCheckbox = false,
   checked = true,
   disabled = false,
+  tooltip = undefined,
 } = defineProps<Props>()
 const emit = defineEmits(['update:modelValue', 'update:checked'])
 
@@ -124,5 +135,6 @@ interface Props {
   withCheckbox?: boolean
   checked?: boolean
   disabled?: boolean
+  tooltip?: string
 }
 </script>

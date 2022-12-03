@@ -4,6 +4,7 @@
     v-model="selected"
     as="div"
     class="relative rounded border border-gray-300 px-4 py-1.5 focus-within:z-10 focus-within:border-gray-600 focus-within:ring-1 focus-within:ring-gray-600"
+    :disabled="isDisabled"
     @click="checkState = true"
   >
     <ComboboxLabel

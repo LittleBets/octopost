@@ -10,16 +10,35 @@
   >
     <slot name="header" />
     <Textarea
-      ref="promptRef"
-      v-model="payloadForm.input_prompt"
-      label="Prompt"
-      name="prompt"
+      ref="textRef"
+      v-model="payloadForm.text"
+      label="Original Text"
+      name="text"
       :rows="20"
-      placeholder="e.g. In a friendly tone, write a blog post convincing old ladies to get a cat as their best friend.
-Include keywords cute, cuddly, fury, kittens"
       required
-      affix-placeholder
     />
+    <RewriteTypeSelector
+      :model-value="baseComposition?.payload?.rewrite_type ?? rewriteTypes[0].id"
+      @update:model-value="(val) => (payloadForm.rewrite_type = val)"
+    />
+    <div class="relative">
+      <ToneSelector
+        v-model:checked="toneSelectorChecked"
+        :model-value="baseComposition?.payload?.tone ?? tones[0].id"
+        @update:model-value="(val) => (payloadForm.tone = val)"
+      />
+      <div v-if="isCorrectGrammarType" class="absolute inset-0 w-full bg-white/70" />
+    </div>
+    <div class="relative">
+      <AudienceSelector
+        v-model:checked="audienceSelectorChecked"
+        title="Target Audience"
+        :model-value="baseComposition?.payload?.audience ?? audiences[0].id"
+        @update:model-value="(val) => (payloadForm.audience = val)"
+      />
+      <div v-if="isCorrectGrammarType" class="absolute inset-0 w-full bg-white/70" />
+    </div>
+
     <TextInput
       v-model.number="payloadForm.composition_length"
       label="Max Number of Words"
@@ -46,7 +65,7 @@ Include keywords cute, cuddly, fury, kittens"
 
 <script lang="ts" setup>
 import { $computed } from 'vue/macros'
-import { nextTick, PropType, reactive } from 'vue'
+import { nextTick, PropType, reactive, watchEffect } from 'vue'
 import TextInput from '@/Components/TextInput.vue'
 import Textarea from '@/Components/Textarea.vue'
 import CompositionResult from '@/Pages/Compose/CompositionResult.vue'
@@ -56,31 +75,49 @@ import EmptyResult from '@/Pages/Compose/EmptyResult.vue'
 import { usePage } from '@inertiajs/inertia-vue3'
 import { CompositionTemplateType } from '@/enums'
 import VariationInput from '@/Pages/Compose/VariationInput.vue'
+import ToneSelector from '@/Pages/Compose/ToneSelector.vue'
+import AudienceSelector from '@/Pages/Compose/AudienceSelector.vue'
+import { audiences, rewriteTypes, tones } from '@/Pages/Compose/templates'
+import RewriteTypeSelector from '@/Pages/Compose/RewriteTypeSelector.vue'
 
 const { props: pageProps } = usePage<{ model?: string }>()
 
 const props = defineProps({
   baseComposition: {
-    type: Object as PropType<Composition<FreeformCompositionPayload>>,
+    type: Object as PropType<Composition<RewriteCompositionPayload>>,
     default: () => undefined,
   },
   rootCompositionId: { type: String, default: undefined },
 })
-const template = CompositionTemplateType.Freeform
+const template = CompositionTemplateType.Rewrite
 
 let compositionResult = $ref<CompositionResult | undefined>(undefined)
 let rootCompositionId = $ref<string | undefined>(props.rootCompositionId)
 let compositionVersion = $ref<number | undefined>(undefined)
 const model = $computed(() => pageProps.value.model)
 
-const payloadForm = reactive<FreeformCompositionPayload>({
+const payloadForm = reactive<RewriteCompositionPayload>({
   variations: props.baseComposition?.payload?.variations ?? 1,
   composition_length: Number(props.baseComposition?.payload?.composition_length ?? 600),
-  input_prompt: props.baseComposition?.payload?.input_prompt ?? '',
+  text: props.baseComposition?.payload?.text ?? '',
+  audience: props.baseComposition?.payload?.audience ?? audiences[0].id,
+  tone: props.baseComposition?.payload?.tone ?? tones[0].id,
+  rewrite_type: props.baseComposition?.payload?.rewrite_type ?? rewriteTypes[0].id,
+})
+
+let audienceSelectorChecked = $ref(false)
+let toneSelectorChecked = $ref(false)
+const isCorrectGrammarType = $computed(() => payloadForm.rewrite_type === 'correct')
+
+watchEffect(() => {
+  if (isCorrectGrammarType) {
+    audienceSelectorChecked = false
+    toneSelectorChecked = false
+  }
 })
 
 const isValid = $computed<boolean>(() => {
-  return payloadForm.input_prompt.trim() !== ''
+  return payloadForm.text.trim() !== ''
 })
 
 let processing = $ref(false)
@@ -93,7 +130,11 @@ async function submit() {
   try {
     const { data } = await axios.post(route('compositions.store'), {
       template,
-      payload: payloadForm,
+      payload: {
+        ...payloadForm,
+        audience: audienceSelectorChecked ? payloadForm.audience : undefined,
+        tone: toneSelectorChecked ? payloadForm.tone : undefined,
+      },
       root_composition_id: rootCompositionId,
       model,
     })
@@ -119,9 +160,13 @@ function startNewHandler() {
 }
 
 function resetPayloadForm() {
+  payloadForm.tone = tones[0].id
   payloadForm.variations = 1
   payloadForm.composition_length = 600
-  payloadForm.input_prompt = ''
+  payloadForm.text = ''
+  payloadForm.audience = undefined
+  audienceSelectorChecked = false
+  toneSelectorChecked = false
 }
 
 function resetResult() {
@@ -132,11 +177,11 @@ function resetResult() {
 
 let compositionLabel = $ref<string | undefined>(props.baseComposition?.label)
 
-const promptRef = $ref<HTMLElement>()
+const textRef = $ref<HTMLElement>()
 
 function setFocus() {
   nextTick(() => {
-    promptRef?.focus()
+    textRef?.focus()
   })
 }
 

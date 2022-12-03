@@ -14,6 +14,10 @@ const templates: TemplateType[] = [
     title: 'Response',
   },
   {
+    id: CompositionTemplateType.Rewrite,
+    title: 'Rewrite • Cleanup • Expand • Compact',
+  },
+  {
     id: CompositionTemplateType.Summary,
     title: 'Summary',
   },
@@ -61,6 +65,13 @@ const summaryOutputFormats = [
   { id: 'bullet points', title: 'Bullet Points' },
 ]
 
+const rewriteTypes = [
+  { id: 'rewrite', title: 'Rewrite' },
+  { id: 'expand', title: 'Expand Text' },
+  { id: 'condense', title: 'Compact Text' },
+  { id: 'correct', title: 'Correct Grammar' },
+]
+
 const compositionLengths = [
   // 100 words = 75 tokens
   {
@@ -87,4 +98,12 @@ const responseTypes = [
   { id: 'message', title: 'Message' },
 ]
 
-export { templates, tones, audiences, compositionLengths, responseTypes, summaryOutputFormats }
+export {
+  templates,
+  tones,
+  audiences,
+  compositionLengths,
+  responseTypes,
+  summaryOutputFormats,
+  rewriteTypes,
+}
