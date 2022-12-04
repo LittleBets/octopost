@@ -9,7 +9,7 @@ class SummaryComposer extends BaseComposer
     public function prompt(array $payload): CompositionPrompt
     {
         $outputFormat = $payload['output_format'] ?? 'paragraph';
-        $outputFormatLiteral = $outputFormat === 'bullet points' ? ' in bullet points ' : ' ';
+        $outputFormatLiteral = $outputFormat === 'bullet points' ? ' in bullet points' : ' ';
         $audience = $payload['audience'] ?? null;
         $addressingLiteral = $audience ? " for {$audience}" : ' ';
         $model = $this->modelName($payload);
@@ -19,7 +19,7 @@ class SummaryComposer extends BaseComposer
             'model' => $model,
             'prompt' => sprintf("Summarize%s%s:%s%s%s", $outputFormatLiteral, $addressingLiteral, PHP_EOL, $text, config('consts.response_separator')),
             'max_tokens' => $this->compositionLengthToTokens($payload['composition_length']),
-            'temperature' => 0.1,
+            'temperature' => 0.4,
             'n' => $payload['variations'],
         ]);
     }
