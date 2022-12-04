@@ -75,11 +75,16 @@ declare global {
     total_tokens: number
   }
 
+  interface CompositionResultChoiceExtras {
+    finish_reason: string
+  }
+
   interface CompositionResultChoice {
     id: string
     created_at: string
     created_at_short: string
     text: string
+    extras: CompositionResultChoiceExtras
   }
 
   const AmazonProductListingTemplateType = 'amazon-product-listing'

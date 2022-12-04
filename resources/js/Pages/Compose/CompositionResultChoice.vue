@@ -6,7 +6,17 @@
   >
     <div class="flex flex-col items-start">
       <p class="mt-1 whitespace-pre-line leading-7 text-gray-900">
-        {{ text }}
+        <span>
+          {{ text }}
+        </span>
+        <span
+          v-if="finishedBecauseOfLength"
+          v-tippy="
+            'Octopost might have stopped generating more text because of the output length you selected. Try increasing the length to get more text.'
+          "
+          class="mx-2 inline-block rounded bg-red-100 py-0.5 px-1 text-sm tracking-wider text-red-900"
+          >...</span
+        >
       </p>
       <div
         class="mt-4 flex w-full items-center justify-between gap-4 opacity-25 transition duration-300 ease-in-out hover:transition-all group-hover:opacity-100"
@@ -65,6 +75,7 @@ import DangerButton from '@/Components/DangerButton.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import { useIsMouseInside } from '@/compositions/useIsMouseInside'
 import { useForm } from '@inertiajs/inertia-vue3'
+import { $computed } from 'vue/macros'
 
 const { copy, isSupported: isClipboardSupported } = useClipboard()
 
@@ -75,6 +86,8 @@ const props = defineProps({
 const emit = defineEmits<{
   (e: 'deleted', choiceId: string): void
 }>()
+
+const finishedBecauseOfLength = $computed(() => props.choice?.extras?.finish_reason === 'length')
 
 let choiceToEdit = $ref<CompositionResultChoice>()
 

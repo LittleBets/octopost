@@ -13,6 +13,7 @@ class CompositionResultChoiceResource extends JsonResource
             'text' => $this->text,
             'created_at' => userTimeZone($this->created_at),
             'created_at_short' => shortDateAndTime($this->created_at),
+            'extras' => $this->extras,
         ];
     }
 }
