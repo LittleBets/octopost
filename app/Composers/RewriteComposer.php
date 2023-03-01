@@ -37,6 +37,6 @@ class RewriteComposer extends BaseComposer
         if($payloadModel != null) {
             return $payloadModel;
         }
-        return 'text-davinci-003';
+        return 'gpt-3.5-turbo';
     }
 }

@@ -47,12 +47,12 @@ class ResponseComposer extends BaseComposer
         if($payloadModel != null) {
             return $payloadModel;
         }
-        return 'text-davinci-003';
+        return 'gpt-3.5-turbo';
 //        return TunedModel::where('composition_type_id', $this->compositionTypeId($payload))
 //            ->where('team_id', auth()->user()->current_team_id)
 //            ->where('status', 'succeeded')
 //            ->first()
-//            ->fine_tuned_model_name ?? 'text-davinci-003';
+//            ->fine_tuned_model_name ?? 'gpt-3.5-turbo';
     }
 
     protected function compositionTypeId(array $payload): string
