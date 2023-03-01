@@ -12,7 +12,7 @@ class FreeformComposer extends BaseComposer
         $maxWords = $payload['composition_length'];
 
         return CompositionPrompt::from([
-            'model' => $payload['model'] ?? 'gpt-3.5-turbo',
+            'model' => $payload['model'] ?? 'text-davinci-003',
             'prompt' => $payload['input_prompt'] ?? '',
             'max_tokens' => $this->convertWordCreditsToTokensLength($maxWords),
             'temperature' => 0.7,

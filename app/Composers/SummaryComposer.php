@@ -36,6 +36,6 @@ class SummaryComposer extends BaseComposer
             return $payloadModel;
         }
         $audience = $payload['audience'] ?? null;
-        return $audience == null ? 'text-curie-001' : 'gpt-3.5-turbo';
+        return $audience == null ? 'text-curie-001' : 'text-davinci-003';
     }
 }
